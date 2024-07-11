@@ -1,18 +1,54 @@
 #include "SBWindow.h"
-
-
-void sb::SBwindow::windowSizeCallback(GLFWwindow* window, int width, int height) {
-	changeTheAspectRatio(width,height);
+#include "game.h"
+void sb::SBwindow::setWindowSize(int windowWidth, int windowHeight) {
+	this->windowWidth = windowWidth;
+	this->windowHeight = windowHeight;
 }
-void sb::SBwindow::changeTheAspectRatio(int width,int height) {
-	glViewport(0, 0, width, height);
+void sb::SBwindow::windowSizeCallback(GLFWwindow* window, int width, int height) {
+	ptr_instance.get()->setWindowSize(width, height);
+	ptr_instance.get()->changeTheAspectRatio();
+}
+void sb::SBwindow::changeTheAspectRatio() {
+
+	sb::PTR_Game game = sb::Game::getInstance();
+
+	float numberTilesWidth = game.get()->getNumberTilesWidth();
+	float numberTilesHeight = game.get()->getNumberTilesHeight();
+
+	float tileWidth = (float)windowWidth / numberTilesWidth;
+	float tileHeight = (float)windowHeight / numberTilesHeight;
+
+	float width;
+	float height;
+	float tileSize;
+
 	glLoadIdentity();
-	float k = (float)width / (float)height;
-	glOrtho(-k, k, -1, 1, -1, 1);
+	if (tileWidth < tileHeight) {
+		float ratio = numberTilesWidth / numberTilesHeight;
+
+		width = numberTilesWidth;
+		height = tileHeight / tileWidth * numberTilesWidth * ratio  ;
+		tileSize = tileWidth;
+
+	}
+	else {
+
+		width = tileWidth / tileHeight * numberTilesWidth;
+		height = numberTilesHeight;
+		tileSize = tileHeight;
+
+	}
+	glViewport(windowWidth / 2 - tileSize * numberTilesWidth / 2, 0, windowWidth, windowHeight);
+	glOrtho(0, width, 0, height, -1, 1);
 }
 
 GLFWwindow* sb::SBwindow::getGLFWwindow() {
 	return ptr_glfwWindow;
+}
+
+void sb::SBwindow::init() {
+	changeTheAspectRatio();
+	glfwSetWindowSizeCallback(ptr_glfwWindow, windowSizeCallback);
 }
 
 //singleton pattern
@@ -27,13 +63,13 @@ sb::SBwindow::SBwindow(int width, int height, const char* title) {
 		throw std::exception("failed to create a window");
 	}
 	glfwMakeContextCurrent(ptr_glfwWindow);
-	changeTheAspectRatio(width, height);
-	glfwSetWindowSizeCallback(ptr_glfwWindow, windowSizeCallback);
+	windowWidth = width;
+	windowHeight = height;
 }
 
 std::shared_ptr<sb::SBwindow> sb::SBwindow::createWindow(int width, int height, const char* title) {
 	if (ptr_instance == nullptr) {
-		std::shared_ptr<sb::SBwindow> temp(new SBwindow(width,height,title));
+		std::shared_ptr<sb::SBwindow> temp(new SBwindow(width, height, title));
 		ptr_instance.swap(temp);
 	}
 	return ptr_instance;

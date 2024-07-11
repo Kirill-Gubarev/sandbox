@@ -1,17 +1,19 @@
 #ifndef WINDOW_H
 #define WINDOW_H
-#include <iostream>
-#include <memory>
-#pragma comment (lib, "opengl32.lib")
-#include <GLFW/glfw3.h>
+
+#include "common.h"
+
 namespace sb {
 	class SBwindow {
 
 	private:
 		GLFWwindow* ptr_glfwWindow;
+		int windowWidth, windowHeight;
+		void setWindowSize(int windowWidth,int windowHeight);
 		static void windowSizeCallback(GLFWwindow* window, int width, int height);
-		static void changeTheAspectRatio(int width, int height);
+		void changeTheAspectRatio();
 	public:
+		void init();
 		GLFWwindow* getGLFWwindow();
 
 
