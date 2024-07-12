@@ -53,6 +53,9 @@ void sb::Game::mainLoop() {
 		glEnd();
 
 		glfwSwapBuffers(glfwWindow);
+
+		area->update();
+
 		glfwPollEvents();
 	}
 	glfwTerminate();

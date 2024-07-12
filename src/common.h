@@ -8,6 +8,8 @@
 #include <exception>
 #include <stdint.h>
 
+#include "vec2d.h"
+
 namespace sb {
 	void init();
 	void start();

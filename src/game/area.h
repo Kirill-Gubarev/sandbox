@@ -11,11 +11,13 @@ namespace sb {
 		std::uint32_t height;
 		sb::Tile** ptr_tileArray;
 	public:
-		~Area();
 		std::uint32_t getWidth();
 		std::uint32_t getHeight();
-		sb::Tile* getTile(std::uint32_t x, std::uint32_t y);
+		sb::Tile*& getTile(std::uint32_t x, std::uint32_t y);
+		void update();
+		void swap(std::uint32_t x1, std::uint32_t y1, std::uint32_t x2, std::uint32_t y2);
 
+		~Area();
 		//singleton pattern
 	private:
 		static std::shared_ptr<sb::Area> ptr_instance;

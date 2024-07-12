@@ -10,8 +10,18 @@ namespace sb {
 		GLFWwindow* ptr_glfwWindow;
 		int windowWidth, windowHeight;
 		void setWindowSize(int windowWidth,int windowHeight);
+
+
 		static void windowSizeCallback(GLFWwindow* window, int width, int height);
 		void changeTheAspectRatio();
+
+		//mouse
+	private:
+		static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+	public:
+		sb::Vec2d getMousePosition();
+		bool isLeftButtonPressed();
+
 	public:
 		void init();
 		GLFWwindow* getGLFWwindow();

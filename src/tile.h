@@ -4,16 +4,29 @@
 #include "common.h"
 
 namespace sb {
+
 	class Tile {
 	public:
-		virtual void update() = 0;
+		bool sleep;
+		Tile();
+		virtual void update(std::uint32_t x, std::uint32_t y) = 0;
 		virtual void setColor() = 0;
 	};
+
 	class Sand : public Tile {
 	public:
-		void update() override;
+		Sand();
+		void update(std::uint32_t x, std::uint32_t y) override;
 		void setColor() override;
 	};
+
+	class Stone : public Tile {
+	public:
+		Stone();
+		void update(std::uint32_t x, std::uint32_t y) override;
+		void setColor() override;
+	};
+
 }
 
 #endif //TILE_H
