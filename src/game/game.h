@@ -1,25 +1,14 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "common.h"
-#include "SBwindow.h"
+#include "../common.h"
 
 namespace sb {
 	class Game {
-
 	private:
-		void drawTile();
-		int numberTilesWidth;
-		int numberTilesHeight;
-	public:
-		int getNumberTilesWidth();
-		int getNumberTilesHeight();
-
-	private:
-		sb::PTR_SBWindow sbWindow;
+		void drawTiles();
 	public:
 		void mainLoop();
-
 
 		//singleton pattern
 	private:
@@ -29,7 +18,7 @@ namespace sb {
 		Game(const Game&) = delete;
 		void operator =(const Game&) = delete;
 		static std::shared_ptr<sb::Game> getInstance();
-		static std::shared_ptr<sb::Game> createGame();
+		static std::shared_ptr<sb::Game> createInstance();
 	};
 	typedef std::shared_ptr<sb::Game> PTR_Game;
 }

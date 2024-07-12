@@ -1,10 +1,10 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#ifndef SBWINDOW_H
+#define SBWINDOW_H
 
 #include "common.h"
 
 namespace sb {
-	class SBwindow {
+	class SBWindow {
 
 	private:
 		GLFWwindow* ptr_glfwWindow;
@@ -19,14 +19,14 @@ namespace sb {
 
 		//singleton pattern
 	private:
-		static std::shared_ptr<sb::SBwindow> ptr_instance;
-		SBwindow(int width, int height, const char*);
-		SBwindow(const SBwindow &) = delete;
-		void operator=(const SBwindow &) = delete;
+		static std::shared_ptr<sb::SBWindow> ptr_instance;
+		SBWindow(int width, int height, const char*);
+		SBWindow(const SBWindow &) = delete;
+		void operator=(const SBWindow &) = delete;
 	public:
-		static std::shared_ptr<sb::SBwindow> getInstance();
-		static std::shared_ptr<sb::SBwindow> createWindow(int width, int height, const char*);
+		static std::shared_ptr<sb::SBWindow> getInstance();
+		static std::shared_ptr<sb::SBWindow> createInstance(int width, int height, const char*);
 	};
-	typedef std::shared_ptr<sb::SBwindow> PTR_SBWindow;
+	typedef std::shared_ptr<sb::SBWindow> PTR_SBWindow;
 }
-#endif //WINDOW_H
+#endif //SBWINDOW_H

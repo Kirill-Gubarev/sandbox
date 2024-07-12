@@ -6,5 +6,12 @@
 #include <iostream>
 #include <memory>
 #include <exception>
+#include <stdint.h>
+
+namespace sb {
+	void init();
+	void start();
+}
+
 
 #endif //COMMON_H

@@ -1,12 +1,17 @@
 cmake_minimum_required(VERSION 3.29 FATAL_ERROR)
 project( sandbox )
-file(GLOB SRC_CPP "src/*.cpp")
-file(GLOB SRC_H "src/*.h")
-file(GLOB SRC_HPP "src/*.hpp")
 add_executable( ${PROJECT_NAME}
-	${SRC_CPP}
-	${SRC_H}
-	${SRC_HPP}
+	src/main.cpp
+	src/common.cpp
+	src/common.h
+	src/SBWindow.cpp
+	src/SBWindow.h
+	src/tile.cpp
+	src/tile.h
+	src/game/game.cpp
+	src/game/game.h
+	src/game/area.cpp
+	src/game/area.h
 )
 add_subdirectory( external/glfw )
 target_link_libraries( ${PROJECT_NAME} glfw )
