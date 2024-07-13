@@ -1,57 +1,35 @@
 #include "area.h"
-#include "../sbWindow.h"
-sb::Area::~Area() {
-	int size = width * height;
-	for (size_t i = 0; i < size; ++i) {
-		if (ptr_tileArray[i] != nullptr)
-			delete ptr_tileArray[i];
-	}
-	delete[] ptr_tileArray;
+#include "sbWindow.h"
+#include "input.h"
+
+
+sb::Vec2d<int> sb::Area::convertMousePosToAreaPos(sb::Vec2d<double> pos) const {
+
+	//type conversion for accurate calculations
+	sb::Vec2d<double> areaBottomLeft = static_cast<sb::Vec2d<double>>(ptr_sbWindow->getAreaBottomLeft());
+	sb::Vec2d<double> areaTopRight = static_cast<sb::Vec2d<double>>(ptr_sbWindow->getAreaTopRight());
+
+	//shift pos.x
+	pos.x = pos.x - ptr_sbWindow->getAreaBottomLeft().x;
+	//pos.x / (width rendering area / width area)
+	pos.x = pos.x / ((areaTopRight.x - areaBottomLeft.x) / static_cast<double>(width));
+
+	//inversion pos.y
+	pos.y = ptr_sbWindow->getHeight() - pos.y;
+	//pos.x / (height rendering area / height area)
+	pos.y = pos.y / ((areaTopRight.y - areaBottomLeft.y) / static_cast<double>(height));
+
+	//type conversion for this class, it works with integers
+	return static_cast<sb::Vec2d<int>>(pos);
 }
-int sb::Area::getWidth() {
-	return width;
-}
-int sb::Area::getHeight() {
-	return height;
-}
-sb::Tile*& sb::Area::getTile(int x, int y) {
-	if (x < 0 || x >= width) throw std::exception("going beyond the width of the area");
-	if (y < 0 || y >= height) throw std::exception("going beyond the height of the area");
-	return ptr_tileArray[x + y * width];
-}
-void sb::Area::swap(int x1, int y1, int x2, int y2) {
-	sb::Tile* temp = getTile(x1, y1);
-	getTile(x1, y1) = getTile(x2, y2);
-	getTile(x2, y2) = temp;
+void sb::Area::mouseSetTile() {
+	sb::Vec2d<double> mousePos = sb::ptr_input->getMousePosition();
+	sb::Vec2d<int> areaPos = convertMousePosToAreaPos(mousePos);
+
+	if (isInsideTheArea(areaPos))
+		setTile(areaPos.x, areaPos.y, new Sand());
 }
 void sb::Area::update() {
-	sb::SBWindow* sbWindow = sb::SBWindow::getInstance().get();
-	//left mouse button pressed
-	if (sbWindow->isLeftButtonPressed())
-	{
-		sb::Vec2d<float> pos = sbWindow->getMousePosition();
-		sb::Vec2d<float> outputLeftBottom = static_cast<sb::Vec2d<float>>(sbWindow->getOutputLeftBottom());
-		sb::Vec2d<float> outputRightTop = static_cast<sb::Vec2d<float>>(sbWindow->getOutputRightTop());
-
-		pos.x = pos.x - sbWindow->getOutputLeftBottom().x;
-		pos.x = pos.x / ((outputRightTop.x - outputLeftBottom.x) / static_cast<float>(width));
-		pos.y = sbWindow->getHeight() - pos.y;
-		pos.y = pos.y / ((outputRightTop.y - outputLeftBottom.y) / static_cast<float>(height));
-
-		int x = static_cast<int>(pos.x);
-		int y = static_cast<int>(pos.y);
-
-		std::cout << x << " " << y << std::endl;
-
-
-
-		if (x >= 0 && x < width &&y>=0&&y<height) {
-			Tile*& tile = getTile(x, y);
-			if (tile == nullptr)
-				tile = new Sand();
-		}
-
-	}
 	for (size_t y = 0; y < height; ++y) {
 		for (size_t x = 0; x < width; ++x) {
 			Tile*& tile = getTile(x, y);
@@ -60,8 +38,50 @@ void sb::Area::update() {
 		}
 	}
 }
+bool sb::Area::isInsideTheArea(sb::Vec2d<int> pos) const {
+	return pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height;
+}
+bool sb::Area::isInsideTheArea(int x, int y) const {
+	return x >= 0 && x < width && y >= 0 && y < height;
+}
+
+
+void sb::Area::swap(int x1, int y1, int x2, int y2) {
+	sb::Tile* temp = getTile(x1, y1);
+	getTile(x1, y1) = getTile(x2, y2);
+	getTile(x2, y2) = temp;
+}
+sb::Tile*& sb::Area::getTile(int x, int y) const {
+	if (!isInsideTheArea(x, y)) throw std::exception("CLASS AREA: going beyond the area");
+	return ptr_tileArray[x + y * width];
+}
+void sb::Area::setTile(int x, int y, sb::Tile* newTile) {
+	Tile*& currentTile = getTile(x, y);
+	if (currentTile != nullptr)
+		delete currentTile;
+	currentTile = newTile;
+}
+
+
+sb::Area::~Area() {
+	int size = width * height;
+	for (size_t i = 0; i < size; ++i) {
+		if (ptr_tileArray[i] != nullptr)
+			delete ptr_tileArray[i];
+	}
+	delete[] ptr_tileArray;
+}
+int sb::Area::getWidth() const {
+	return width;
+}
+int sb::Area::getHeight() const {
+	return height;
+}
+
+
 //singleton pattern
-std::shared_ptr<sb::Area> sb::Area::ptr_instance(nullptr);
+sb::Area* sb::ptr_area = nullptr;
+std::unique_ptr<sb::Area> sb::Area::ptr_instance(nullptr);
 sb::Area::Area(int width, int height)
 	:width(width), height(height) {
 	int size = width * height;
@@ -77,12 +97,13 @@ sb::Area::Area(int width, int height)
 		}
 	}
 }
-std::shared_ptr<sb::Area> sb::Area::getInstance() {
-	return ptr_instance;
+sb::Area* sb::Area::getInstance() {
+	return ptr_instance.get();
 }
-std::shared_ptr<sb::Area> sb::Area::createInstance(int width, int height) {
+sb::Area* sb::Area::createInstance(int width, int height) {
 	if (ptr_instance == nullptr) {
 		ptr_instance.reset(new Area(width, height));
+		ptr_area = ptr_instance.get();
 	}
-	return ptr_instance;
+	return ptr_instance.get();
 }

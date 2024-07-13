@@ -2,48 +2,43 @@
 #define SBWINDOW_H
 
 #include "common.h"
-
+#include "utilities/vec2d.hpp"
 namespace sb {
+	//this class is the wrapper for GLFWwindow
 	class SBWindow {
 
 	private:
 		GLFWwindow* ptr_glfwWindow;
+
+		//Bottom left corner of the area
+		sb::Vec2d<int> areaBottomLeft;
+		//Top right corner of the area
+		sb::Vec2d<int> areaTopRight;
+
 		int width;
 		int height;
-		sb::Vec2d<int> outputLeftBottom;
-		sb::Vec2d<int> outputRightTop;
-		void setWindowSize(int width,int height);
+		void setWindowSize(int width, int height);
 	public:
-		int getWidth();
-		int getHeight();
-		sb::Vec2d<int> getOutputLeftBottom();
-		sb::Vec2d<int> getOutputRightTop();
+		int getWidth() const;
+		int getHeight() const;
+		sb::Vec2d<int> getAreaBottomLeft() const;
+		sb::Vec2d<int> getAreaTopRight() const;
+		GLFWwindow* getGLFWwindow() const;
 	private:
 		static void windowSizeCallback(GLFWwindow* window, int width, int height);
 		void changeOutputArea();
 
-		//mouse
+
+		//singleton
 	private:
-		static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-	public:
-		sb::Vec2d<float> getMousePosition();
-		bool isLeftButtonPressed();
-
-	public:
-		void init();
-		GLFWwindow* getGLFWwindow();
-
-
-		//singleton pattern
-	private:
-		static std::shared_ptr<sb::SBWindow> ptr_instance;
+		static std::unique_ptr<sb::SBWindow> ptr_instance;
 		SBWindow(int width, int height, const char*);
-		SBWindow(const SBWindow &) = delete;
-		void operator=(const SBWindow &) = delete;
+		SBWindow(const SBWindow&) = delete;
+		void operator=(const SBWindow&) = delete;
 	public:
-		static std::shared_ptr<sb::SBWindow> getInstance();
-		static std::shared_ptr<sb::SBWindow> createInstance(int width, int height, const char*);
+		static sb::SBWindow* getInstance();
+		static sb::SBWindow* createInstance(int width, int height, const char*);
 	};
-	typedef std::shared_ptr<sb::SBWindow> PTR_SBWindow;
+	extern sb::SBWindow* ptr_sbWindow;
 }
 #endif //SBWINDOW_H

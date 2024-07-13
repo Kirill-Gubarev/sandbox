@@ -8,11 +8,10 @@
 #include <exception>
 #include <stdint.h>
 
-#include "vec2d.hpp"
-
 namespace sb {
 	void init();
 	void start();
+	void exitProgram(std::exception& ex);
 }
 
 

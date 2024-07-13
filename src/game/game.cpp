@@ -1,14 +1,14 @@
 #include "game.h"
-#include "../sbWindow.h"
-#include "../tile.h"
+#include "sbWindow.h"
+#include "Input.h"
+#include "tile.h"
 #include "area.h"
+
 
 void sb::Game::drawTiles() {
 
-	sb::Area* ptr_area = sb::Area::getInstance().get();
-
-	std::uint32_t areaWidth = ptr_area->getWidth();
-	std::uint32_t areaHeight = ptr_area->getHeight();
+	int areaWidth = ptr_area->getWidth();
+	int areaHeight = ptr_area->getHeight();
 
 	for (int x = 0; x < areaWidth; x++) {
 		for (int y = areaHeight - 1; y >= 0; y--) {
@@ -17,8 +17,8 @@ void sb::Game::drawTiles() {
 				continue;
 
 			glBegin(GL_TRIANGLE_FAN);
-			
-			tile->setColor();
+
+			sb::Game::setColor(tile->getColor());
 			glVertex2f(1 + x, 1 + y);
 			glVertex2f(1 + x, 0 + y);
 			glVertex2f(0 + x, 0 + y);
@@ -26,17 +26,16 @@ void sb::Game::drawTiles() {
 			glEnd();
 		}
 	}
-
-
 }
-
+void sb::Game::setColor(sb::RGB color) {
+	glColor3ub(color.r, color.g, color.b);
+}
 void sb::Game::mainLoop() {
-	sb::SBWindow* ptr_sbWindow = sb::SBWindow::getInstance().get();
-	sb::Area* area = sb::Area::getInstance().get();
-	ptr_sbWindow->init();
 	GLFWwindow* glfwWindow = ptr_sbWindow->getGLFWwindow();
 	while (!glfwWindowShouldClose(glfwWindow))
 	{
+		ptr_input->update();
+
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		drawTiles();
@@ -46,15 +45,15 @@ void sb::Game::mainLoop() {
 		glColor3ub(150, 150, 150);
 
 		glVertex2f(0, 0);
-		glVertex2f(0, area->getHeight());
-		glVertex2f(area->getWidth(), area->getHeight());
-		glVertex2f(area->getWidth(), 0);
+		glVertex2f(0, ptr_area->getHeight());
+		glVertex2f(ptr_area->getWidth(), ptr_area->getHeight());
+		glVertex2f(ptr_area->getWidth(), 0);
 
 		glEnd();
 
 		glfwSwapBuffers(glfwWindow);
 
-		area->update();
+		ptr_area->update();
 
 		glfwPollEvents();
 	}
@@ -62,17 +61,20 @@ void sb::Game::mainLoop() {
 }
 
 
+
 //singleton pattern
-std::shared_ptr<sb::Game> sb::Game::ptr_instance(nullptr);
+sb::Game* sb::ptr_game = nullptr;
+std::unique_ptr<sb::Game> sb::Game::ptr_instance(nullptr);
 sb::Game::Game() {
-	
+
 }
-std::shared_ptr<sb::Game> sb::Game::getInstance() {
-	return ptr_instance;
+sb::Game* sb::Game::getInstance() {
+	return ptr_instance.get();
 }
-std::shared_ptr<sb::Game> sb::Game::createInstance() {
+sb::Game* sb::Game::createInstance() {
 	if (ptr_instance == nullptr) {
 		ptr_instance.reset(new Game());
+		sb::ptr_game = ptr_instance.get();
 	}
-	return ptr_instance;
+	return ptr_instance.get();
 }
