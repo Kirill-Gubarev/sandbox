@@ -8,7 +8,7 @@ add_executable( ${PROJECT_NAME}
 	src/SBWindow.h
 	src/tile.cpp
 	src/tile.h
-	src/vec2d.h
+	src/vec2d.hpp
 	src/game/game.cpp
 	src/game/game.h
 	src/game/area.cpp
