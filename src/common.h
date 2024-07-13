@@ -8,7 +8,7 @@
 #include <exception>
 #include <stdint.h>
 
-#include "vec2d.h"
+#include "vec2d.hpp"
 
 namespace sb {
 	void init();

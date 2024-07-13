@@ -1,42 +1,68 @@
 #include "SBWindow.h"
 #include "game/game.h"
 #include "game/area.h"
-void sb::SBWindow::setWindowSize(int windowWidth, int windowHeight) {
-	this->windowWidth = windowWidth;
-	this->windowHeight = windowHeight;
+void sb::SBWindow::setWindowSize(int width, int height) {
+	this->width = width;
+	this->height = height;
+}
+
+int sb::SBWindow::getWidth() {
+	return width;
+}
+int sb::SBWindow::getHeight(){
+	return height;
+}
+sb::Vec2d<int> sb::SBWindow::getOutputLeftBottom() {
+	return outputLeftBottom;
+}
+sb::Vec2d<int> sb::SBWindow::getOutputRightTop() {
+	return outputRightTop;
 }
 void sb::SBWindow::windowSizeCallback(GLFWwindow* window, int width, int height) {
 	ptr_instance.get()->setWindowSize(width, height);
-	ptr_instance.get()->changeTheAspectRatio();
+	ptr_instance.get()->changeOutputArea();
 }
-void sb::SBWindow::changeTheAspectRatio() {
+void sb::SBWindow::changeOutputArea() {
 
 	Area* area = sb::Area::getInstance().get();
 
 	float numberTilesWidth = area->getWidth();
 	float numberTilesHeight = area->getHeight();
 
-	float tileWidth = (float)windowWidth / numberTilesWidth;
-	float tileHeight = (float)windowHeight / numberTilesHeight;
-
-	float width;
-	float height;
+	float tileWidth = (float)width / numberTilesWidth;
+	float tileHeight = (float)height / numberTilesHeight;
 	float tileSize;
+
+	float drawWidth;
+	float drawHeight;
+
 
 	if (tileWidth < tileHeight) {
 		float ratio = numberTilesWidth / numberTilesHeight;
 		tileSize = tileWidth;
-		width = numberTilesWidth;
-		height = tileHeight / tileSize * numberTilesWidth / ratio;
+		drawWidth = numberTilesWidth;
+		drawHeight = tileHeight / tileSize * numberTilesWidth / ratio;
 	}
 	else {
 		tileSize = tileHeight;
-		width = tileWidth / tileSize * numberTilesWidth;
-		height = numberTilesHeight;
+		drawWidth = tileWidth / tileSize * numberTilesWidth;
+		drawHeight = numberTilesHeight;
 	}
 	glLoadIdentity();
-	glViewport(windowWidth / 2 - tileSize * numberTilesWidth / 2, 0, windowWidth, windowHeight);
-	glOrtho(0, width, 0, height, -1, 1);
+	outputLeftBottom.x = width / 2 - tileSize * numberTilesWidth / 2;
+	outputLeftBottom.y = 0;
+	outputRightTop.x = width / 2 + tileSize * numberTilesWidth / 2;
+	outputRightTop.y = tileSize * numberTilesHeight;
+
+	std::cout
+		<< "LB x: " << outputLeftBottom.x
+		<< " LB y: " << outputLeftBottom.y
+		<< " RT x: " << outputRightTop.x
+		<< " RT y: " << outputRightTop.y
+		<< std::endl;
+
+	glViewport(outputLeftBottom.x, outputLeftBottom.y, width, height);
+	glOrtho(0, drawWidth, 0, drawHeight, -1, 1);
 }
 
 //mouse
@@ -49,10 +75,10 @@ void sb::SBWindow::mouseButtonCallback(GLFWwindow* window, int button, int actio
 	double xpos, ypos;
 	glfwGetCursorPos(window, &xpos, &ypos);
 }
-sb::Vec2d sb::SBWindow::getMousePosition() {
+sb::Vec2d<float> sb::SBWindow::getMousePosition() {
 	double x, y;
 	glfwGetCursorPos(ptr_glfwWindow, &x, &y);
-	return Vec2d(x,y);
+	return Vec2d<float>(x,y);
 }
 bool sb::SBWindow::isLeftButtonPressed() {
 	int state = glfwGetMouseButton(ptr_glfwWindow, GLFW_MOUSE_BUTTON_LEFT);
@@ -65,7 +91,7 @@ GLFWwindow* sb::SBWindow::getGLFWwindow() {
 }
 
 void sb::SBWindow::init() {
-	changeTheAspectRatio();
+	changeOutputArea();
 	glfwSetWindowSizeCallback(ptr_glfwWindow, windowSizeCallback);
 	glfwSetMouseButtonCallback(ptr_glfwWindow, mouseButtonCallback);
 }
@@ -75,7 +101,7 @@ std::shared_ptr<sb::SBWindow> PTR_SBWindow(nullptr);
 std::shared_ptr<sb::SBWindow> sb::SBWindow::ptr_instance(nullptr);
 
 sb::SBWindow::SBWindow(int width, int height, const char* title)
-	:windowWidth(width), windowHeight(height) {
+	:width(width), height(height),outputLeftBottom(),outputRightTop () {
 	if (!glfwInit()) {
 		throw std::exception("failed to init glfw");
 	}
