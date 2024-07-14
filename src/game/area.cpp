@@ -27,14 +27,12 @@ void sb::Area::mouseSetTile() {
 	sb::Vec2d<int> areaPos = convertMousePosToAreaPos(mousePos);
 
 	if (isInsideTheArea(areaPos))
-		setTile(areaPos.x, areaPos.y, new Sand());
+		setTile(areaPos.x, areaPos.y, Tile(Tile::Type::sand));
 }
 void sb::Area::update() {
 	for (size_t y = 0; y < height; ++y) {
 		for (size_t x = 0; x < width; ++x) {
-			Tile*& tile = getTile(x, y);
-			if (tile != nullptr && !tile->sleep)
-				tile->update(x, y);
+				getTile(x,y).update(x,y);
 		}
 	}
 }
@@ -47,28 +45,21 @@ bool sb::Area::isInsideTheArea(int x, int y) const {
 
 
 void sb::Area::swap(int x1, int y1, int x2, int y2) {
-	sb::Tile* temp = getTile(x1, y1);
+	sb::Tile temp = getTile(x1, y1);
 	getTile(x1, y1) = getTile(x2, y2);
 	getTile(x2, y2) = temp;
 }
-sb::Tile*& sb::Area::getTile(int x, int y) const {
+sb::Tile& sb::Area::getTile(int x, int y) const {
 	if (!isInsideTheArea(x, y)) throw std::exception("CLASS AREA: going beyond the area");
 	return ptr_tileArray[x + y * width];
 }
-void sb::Area::setTile(int x, int y, sb::Tile* newTile) {
-	Tile*& currentTile = getTile(x, y);
-	if (currentTile != nullptr)
-		delete currentTile;
+void sb::Area::setTile(int x, int y, sb::Tile newTile) {
+	Tile& currentTile = getTile(x, y);
 	currentTile = newTile;
 }
 
 
 sb::Area::~Area() {
-	int size = width * height;
-	for (size_t i = 0; i < size; ++i) {
-		if (ptr_tileArray[i] != nullptr)
-			delete ptr_tileArray[i];
-	}
 	delete[] ptr_tileArray;
 }
 int sb::Area::getWidth() const {
@@ -84,16 +75,13 @@ sb::Area* sb::ptr_area = nullptr;
 std::unique_ptr<sb::Area> sb::Area::ptr_instance(nullptr);
 sb::Area::Area(int width, int height)
 	:width(width), height(height) {
-	int size = width * height;
-	ptr_tileArray = new Tile * [size];
-	for (size_t i = 0; i < size; ++i) {
-		ptr_tileArray[i] = nullptr;
-	}
 
+	int size = width * height;
+	ptr_tileArray = new Tile[size];
 
 	for (int y = height / 2; y < height / 2 + 3; ++y) {
 		for (int x = width / 2 - 10; x < width / 2 + 10; ++x) {
-			getTile(x, y) = new Stone();
+			setTile(x, y, Tile(Tile::Type::stone) );
 		}
 	}
 }

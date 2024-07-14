@@ -11,18 +11,18 @@ namespace sb {
 		//basic game logic
 	public:
 		void mouseSetTile();
-		void setTile(int x, int y, sb::Tile* newTile);
+		void setTile(int x, int y,sb::Tile newTile);
 		void swap(int x1, int y1, int x2, int y2);
 		void update();
 		sb::Vec2d<int> convertMousePosToAreaPos(sb::Vec2d<double> pos) const;
-		sb::Tile*& getTile(int x, int y) const;
+		sb::Tile& getTile(int x, int y) const;
 		bool isInsideTheArea(sb::Vec2d<int> pos) const;
 		bool isInsideTheArea(int x, int y) const;
 		//data
 	private:
 		int width;
 		int height;
-		sb::Tile** ptr_tileArray;
+		sb::Tile* ptr_tileArray;
 	public:
 		int getWidth() const;
 		int getHeight() const;

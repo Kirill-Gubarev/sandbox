@@ -4,30 +4,34 @@
 #include "common.h"
 #include "utilities/rgb.h"
 namespace sb {
-
 	//the main unit
-	class Tile {
+	struct Tile {
 	public:
+		enum class Type : std::uint32_t{
+			empty,
+			sand,
+			stone
+		};
+		Type type;
+		sb::RGB color;
+		//if the tile is sleeping, then update is not called for it
 		bool sleep;
+
 		Tile();
-		virtual void update(std::uint32_t x, std::uint32_t y) = 0;
-		virtual sb::RGB getColor() const = 0;
-	};
+		Tile(Type type);
 
-	class Sand : public Tile {
-	public:
-		Sand();
-		void update(std::uint32_t x, std::uint32_t y) override;
-		sb::RGB getColor() const override;
-	};
+		sb::RGB getColor() const;
+		bool isEmpty() const;
+		bool isNotEmpty() const;
+		void update(int x, int y);
 
-	class Stone : public Tile {
-	public:
-		Stone();
-		void update(std::uint32_t x, std::uint32_t y) override;
-		sb::RGB getColor() const  override;
-	};
 
+		//STATUS UPDATES
+	private:
+		//   emptyUpdate();
+		void sandUpdate(int x, int y);
+		//	 stoneUpdate();
+	};
 }
 
 #endif //TILE_H

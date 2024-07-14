@@ -28,13 +28,13 @@ void sb::Render::drawTiles() {
 
 	for (int x = 0; x < areaWidth; x++) {
 		for (int y = areaHeight - 1; y >= 0; y--) {
-			sb::Tile* tile = ptr_area->getTile(x, y);
-			if (tile == nullptr)
+			sb::Tile& tile = ptr_area->getTile(x, y);
+			if (tile.isNotEmpty())
 				continue;
 
 			glBegin(GL_TRIANGLE_FAN);
 
-			sb::Render::setColor(tile->getColor());
+			sb::Render::setColor(tile.getColor());
 			glVertex2f(1 + x, 1 + y);
 			glVertex2f(1 + x, 0 + y);
 			glVertex2f(0 + x, 0 + y);
