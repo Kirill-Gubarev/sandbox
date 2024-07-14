@@ -26,7 +26,12 @@ namespace sb {
 		GLFWwindow* getGLFWwindow() const;
 	private:
 		static void windowSizeCallback(GLFWwindow* window, int width, int height);
+		static void windowCloseCallback(GLFWwindow* window);
+		bool windowOpen;
 		void changeOutputArea();
+	public:
+		bool isWindowOpen() const;
+
 
 
 		//singleton

@@ -4,6 +4,8 @@
 #include "tile.h"
 #include "area.h"
 
+#include <thread>
+#include <chrono>
 
 void sb::Game::drawTiles() {
 
@@ -32,10 +34,37 @@ void sb::Game::setColor(sb::RGB color) {
 }
 void sb::Game::mainLoop() {
 	GLFWwindow* glfwWindow = ptr_sbWindow->getGLFWwindow();
-	while (!glfwWindowShouldClose(glfwWindow))
-	{
+
+	double now = glfwGetTime();
+	double previousTime = now;
+
+	double fpsCounter = 0;
+	double previousCounterTime = now;
+
+	while (sb::ptr_sbWindow->isWindowOpen()) {
+		//FPS controller
+		now = glfwGetTime();
+		double sleepTime = frameDuration - (now - previousTime);
+		previousTime = now;
+
+		if (sleepTime > 0) {
+			std::this_thread::sleep_for(std::chrono::duration<double>(sleepTime));
+		}
+
+		//FPS counter
+		fpsCounter++;
+		if ((now - previousCounterTime) >= 1.0) {
+			std::cout << "FPS: " << fpsCounter << std::endl;
+			fpsCounter = 0;
+			previousCounterTime = now;
+		}
+
+		//input
+		glfwPollEvents();
 		ptr_input->update();
 
+
+		//render
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		drawTiles();
@@ -53,9 +82,9 @@ void sb::Game::mainLoop() {
 
 		glfwSwapBuffers(glfwWindow);
 
-		ptr_area->update();
 
-		glfwPollEvents();
+		//physics
+		ptr_area->update();
 	}
 	glfwTerminate();
 }
@@ -65,7 +94,7 @@ void sb::Game::mainLoop() {
 //singleton pattern
 sb::Game* sb::ptr_game = nullptr;
 std::unique_ptr<sb::Game> sb::Game::ptr_instance(nullptr);
-sb::Game::Game() {
+sb::Game::Game() :frameDuration(1.0 / 60.0) {
 
 }
 sb::Game* sb::Game::getInstance() {

@@ -26,8 +26,15 @@ GLFWwindow* sb::SBWindow::getGLFWwindow() const {
 
 
 void sb::SBWindow::windowSizeCallback(GLFWwindow* window, int width, int height) {
-	ptr_instance.get()->setWindowSize(width, height);
-	ptr_instance.get()->changeOutputArea();
+	ptr_sbWindow->setWindowSize(width, height);
+	ptr_sbWindow->changeOutputArea();
+}
+void sb::SBWindow::windowCloseCallback(GLFWwindow* window) {
+	ptr_sbWindow->windowOpen = false;
+	std::cout << "windowCloseCallback();" << std::endl;
+}
+bool sb::SBWindow::isWindowOpen() const {
+	return windowOpen;
 }
 void sb::SBWindow::changeOutputArea() {
 
@@ -84,10 +91,12 @@ sb::SBWindow::SBWindow(int width, int height, const char* title)
 		glfwTerminate();
 		throw std::exception("failed to create a window");
 	}
+	windowOpen = true;
 	glfwMakeContextCurrent(ptr_glfwWindow);
 
 	changeOutputArea();
 	glfwSetWindowSizeCallback(ptr_glfwWindow, windowSizeCallback);
+	glfwSetWindowCloseCallback(ptr_glfwWindow, windowCloseCallback);
 }
 sb::SBWindow* sb::SBWindow::createInstance(int width, int height, const char* title) {
 	if (ptr_instance == nullptr) {
