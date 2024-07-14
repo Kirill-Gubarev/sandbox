@@ -1,5 +1,5 @@
-#ifndef VEC2D_H
-#define VEC2D_H
+#ifndef VEC2D_HPP
+#define VEC2D_HPP
 
 #include "common.h"
 
@@ -21,4 +21,4 @@ namespace sb {
 
 	};
 }
-#endif //VEC2D_H
+#endif //VEC2D_HPP

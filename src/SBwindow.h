@@ -34,7 +34,7 @@ namespace sb {
 
 
 
-		//singleton
+		//singleton pattern
 	private:
 		static std::unique_ptr<sb::SBWindow> ptr_instance;
 		SBWindow(int width, int height, const char*);

@@ -7,17 +7,12 @@
 namespace sb {
 	//this class manages the main game logic
 	class Game {
-
-
 	private:
 		const double frameDuration;// 1.0 / 60.0 is 60 FPS
 		//but for some reason it turns out to be 66. 
 		//I don't know how to fix it yet.
 
-
-	private:
-		void drawTiles();
-		void setColor(sb::RGB color);
+	
 	public:
 		void mainLoop();
 

@@ -3,6 +3,7 @@
 #include "game/game.h"
 #include "game/area.h"
 #include "input.h"
+#include "render.h"
 
 
 void sb::init() {
@@ -11,6 +12,7 @@ void sb::init() {
 		sb::Game::createInstance();
 		sb::SBWindow::createInstance(900, 500, "sandbox");
 		sb::Input::createInstance();
+		sb::Render::createInstance();
 	}
 	catch (std::exception& ex)
 	{

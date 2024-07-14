@@ -3,35 +3,8 @@
 #include "Input.h"
 #include "tile.h"
 #include "area.h"
+#include "render.h"
 
-#include <thread>
-#include <chrono>
-
-void sb::Game::drawTiles() {
-
-	int areaWidth = ptr_area->getWidth();
-	int areaHeight = ptr_area->getHeight();
-
-	for (int x = 0; x < areaWidth; x++) {
-		for (int y = areaHeight - 1; y >= 0; y--) {
-			sb::Tile* tile = ptr_area->getTile(x, y);
-			if (tile == nullptr)
-				continue;
-
-			glBegin(GL_TRIANGLE_FAN);
-
-			sb::Game::setColor(tile->getColor());
-			glVertex2f(1 + x, 1 + y);
-			glVertex2f(1 + x, 0 + y);
-			glVertex2f(0 + x, 0 + y);
-			glVertex2f(0 + x, 1 + y);
-			glEnd();
-		}
-	}
-}
-void sb::Game::setColor(sb::RGB color) {
-	glColor3ub(color.r, color.g, color.b);
-}
 void sb::Game::mainLoop() {
 	GLFWwindow* glfwWindow = ptr_sbWindow->getGLFWwindow();
 
@@ -63,25 +36,8 @@ void sb::Game::mainLoop() {
 		glfwPollEvents();
 		ptr_input->update();
 
-
 		//render
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		drawTiles();
-
-		glLineWidth(2);
-		glBegin(GL_LINE_LOOP);
-		glColor3ub(150, 150, 150);
-
-		glVertex2f(0, 0);
-		glVertex2f(0, ptr_area->getHeight());
-		glVertex2f(ptr_area->getWidth(), ptr_area->getHeight());
-		glVertex2f(ptr_area->getWidth(), 0);
-
-		glEnd();
-
-		glfwSwapBuffers(glfwWindow);
-
+		sb::ptr_render->update();
 
 		//physics
 		ptr_area->update();

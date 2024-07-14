@@ -7,6 +7,8 @@
 #include <memory>
 #include <exception>
 #include <stdint.h>
+#include <thread>
+#include <chrono>
 
 namespace sb {
 	void init();
