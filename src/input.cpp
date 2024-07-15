@@ -5,9 +5,9 @@
 
 void sb::Input::update() {
 	if (isLeftButtonPressed())
-	{
-		sb::ptr_area->mouseSetTile();
-	}
+		sb::ptr_area->mouseLeftButtonSetTile();
+	if (isRightButtonPressed())
+		sb::ptr_area->mouseRightButtonSetTile();
 }
 
 
@@ -26,6 +26,10 @@ sb::Vec2d<double> sb::Input::getMousePosition() const {
 }
 bool sb::Input::isLeftButtonPressed() const {
 	int state = glfwGetMouseButton(sb::ptr_sbWindow->getGLFWwindow(), GLFW_MOUSE_BUTTON_LEFT);
+	return state == GLFW_PRESS;
+}
+bool sb::Input::isRightButtonPressed() const {
+	int state = glfwGetMouseButton(sb::ptr_sbWindow->getGLFWwindow(), GLFW_MOUSE_BUTTON_RIGHT);
 	return state == GLFW_PRESS;
 }
 

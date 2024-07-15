@@ -9,6 +9,8 @@
 #include <stdint.h>
 #include <thread>
 #include <chrono>
+#include <random>
+#include <string>
 
 namespace sb {
 	void init();

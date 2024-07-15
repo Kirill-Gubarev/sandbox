@@ -13,14 +13,19 @@ void sb::init() {
 		sb::SBWindow::createInstance(900, 500, "sandbox");
 		sb::Input::createInstance();
 		sb::Render::createInstance();
+		srand(time(nullptr));
 	}
-	catch (std::exception& ex)
-	{
+	catch (std::exception& ex) {
 		sb::exitProgram(ex);
 	}
 }
 void sb::start() {
-	sb::Game::getInstance()->mainLoop();
+	try {
+		sb::Game::getInstance()->mainLoop();
+	}
+	catch (std::exception& ex) {
+		sb::exitProgram(ex);
+	}
 }
 void sb::exitProgram(std::exception& ex) {
 	std::cerr << "EXCEPTION: " << ex.what() << std::endl;

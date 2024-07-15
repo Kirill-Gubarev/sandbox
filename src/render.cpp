@@ -26,15 +26,15 @@ void sb::Render::drawTiles() {
 	int areaWidth = ptr_area->getWidth();
 	int areaHeight = ptr_area->getHeight();
 
-	for (int x = 0; x < areaWidth; x++) {
-		for (int y = areaHeight - 1; y >= 0; y--) {
+	for (int y = 0; y < areaHeight; y++) {
+		for (int x = 0; x < areaWidth; x++) {
 			sb::Tile& tile = ptr_area->getTile(x, y);
-			if (tile.isNotEmpty())
+			if (tile.isEmpty())
 				continue;
 
 			glBegin(GL_TRIANGLE_FAN);
 
-			sb::Render::setColor(tile.getColor());
+			sb::Render::setColor(tile.color);
 			glVertex2f(1 + x, 1 + y);
 			glVertex2f(1 + x, 0 + y);
 			glVertex2f(0 + x, 0 + y);

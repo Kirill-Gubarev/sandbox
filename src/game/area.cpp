@@ -22,17 +22,33 @@ sb::Vec2d<int> sb::Area::convertMousePosToAreaPos(sb::Vec2d<double> pos) const {
 	//type conversion for this class, it works with integers
 	return static_cast<sb::Vec2d<int>>(pos);
 }
-void sb::Area::mouseSetTile() {
+void sb::Area::mouseLeftButtonSetTile() {
 	sb::Vec2d<double> mousePos = sb::ptr_input->getMousePosition();
 	sb::Vec2d<int> areaPos = convertMousePosToAreaPos(mousePos);
 
-	if (isInsideTheArea(areaPos))
+	if (isInsideTheArea(areaPos)){
 		setTile(areaPos.x, areaPos.y, Tile(Tile::Type::sand));
+		resetTilesSleepNearby(areaPos.x, areaPos.y);
+	}
+}
+void sb::Area::mouseRightButtonSetTile() {
+	sb::Vec2d<double> mousePos = sb::ptr_input->getMousePosition();
+	sb::Vec2d<int> areaPos = convertMousePosToAreaPos(mousePos);
+
+	if (isInsideTheArea(areaPos)){
+		setTile(areaPos.x, areaPos.y, Tile(Tile::Type::water));
+		resetTilesSleepNearby(areaPos.x, areaPos.y);
+	}
 }
 void sb::Area::update() {
-	for (size_t y = 0; y < height; ++y) {
-		for (size_t x = 0; x < width; ++x) {
-				getTile(x,y).update(x,y);
+	for (int y = 0; y < height; ++y) {
+		for (int x = 0; x < width; ++x) {
+			getTile(x, y).update(x,y);
+		}
+	}
+	for (int y = 0; y < height; ++y) {
+		for (int x = 0; x < width; ++x) {
+			getTile(x, y).resetUpdate();
 		}
 	}
 }
@@ -44,13 +60,39 @@ bool sb::Area::isInsideTheArea(int x, int y) const {
 }
 
 
-void sb::Area::swap(int x1, int y1, int x2, int y2) {
-	sb::Tile temp = getTile(x1, y1);
-	getTile(x1, y1) = getTile(x2, y2);
-	getTile(x2, y2) = temp;
+void sb::Area::tileSwap(int x1, int y1, int x2, int y2) {
+	sb::Tile& l_tile1 = getTile(x1, y1);
+	sb::Tile& l_tile2 = getTile(x2, y2);
+
+	//swapping
+	sb::Tile temp = l_tile1;
+	l_tile1 = l_tile2;
+	l_tile2 = temp;
+
+	resetTilesSleepNearby(x2, y2);
+}
+void sb::Area::resetTilesSleepNearby(int x, int y) {
+	int limitX = x + 1;
+	int limitY = y + 1;
+	if (limitX >= width)limitX--;
+	else if (x > 0) x--; 
+	if (limitY >= height)limitY--;
+	else if (y > 0) y--;
+
+	for (; y < limitY; y++) {
+		for (; x < limitX; x++) {
+			getTile(x, y).resetSleep();
+		}
+	}
 }
 sb::Tile& sb::Area::getTile(int x, int y) const {
-	if (!isInsideTheArea(x, y)) throw std::exception("CLASS AREA: going beyond the area");
+	if (!isInsideTheArea(x, y)) {
+		std::string message = "CLASS AREA: going beyond the area";
+		message += " x: " + std::to_string(x);
+		message += " y: " + std::to_string(y);
+		throw std::exception(message.c_str());
+	}
+
 	return ptr_tileArray[x + y * width];
 }
 void sb::Area::setTile(int x, int y, sb::Tile newTile) {
@@ -77,11 +119,15 @@ sb::Area::Area(int width, int height)
 	:width(width), height(height) {
 
 	int size = width * height;
-	ptr_tileArray = new Tile[size];
-
+	ptr_tileArray = static_cast<Tile*>(malloc(sizeof(Tile)*size));
+	for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
+			ptr_tileArray[x + y * width] = Tile(Tile::Type::empty);
+		}
+	}
 	for (int y = height / 2; y < height / 2 + 3; ++y) {
 		for (int x = width / 2 - 10; x < width / 2 + 10; ++x) {
-			setTile(x, y, Tile(Tile::Type::stone) );
+			setTile(x, y, Tile(Tile::Type::stone));
 		}
 	}
 }

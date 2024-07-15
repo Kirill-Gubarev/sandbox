@@ -14,6 +14,7 @@ namespace sb {
 	public:
 		sb::Vec2d<double> getMousePosition() const;
 		bool isLeftButtonPressed() const;
+		bool isRightButtonPressed() const;
 
 
 		//singleton pattern
