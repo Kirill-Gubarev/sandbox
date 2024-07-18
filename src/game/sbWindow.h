@@ -1,8 +1,11 @@
 #ifndef SBWINDOW_H
 #define SBWINDOW_H
 
+
 #include "common.h"
 #include "utilities/vec2d.hpp"
+
+
 namespace sb {
 	//this class is the wrapper for GLFWwindow
 	class SBWindow {
@@ -46,4 +49,6 @@ namespace sb {
 	};
 	extern sb::SBWindow* ptr_sbWindow;
 }
+
+
 #endif //SBWINDOW_H

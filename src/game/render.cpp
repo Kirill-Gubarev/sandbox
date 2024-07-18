@@ -1,6 +1,6 @@
-#include "render.h"
-#include "game/area.h"
-#include "sbWindow.h"
+#include "game/render.h"
+#include "game/sbWindow.h"
+#include "area/area.h"
 
 
 void sb::Render::update() {

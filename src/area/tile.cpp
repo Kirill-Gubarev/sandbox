@@ -1,5 +1,6 @@
-#include "tile.h"
-#include "game/area.h"
+#include "area/tile.h"
+#include "area/area.h"
+
 
 sb::Tile::Tile() :Tile(Type::empty) {
 

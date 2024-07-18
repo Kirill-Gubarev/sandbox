@@ -1,4 +1,6 @@
-#include "rgb.h"
+#include "utilities/rgb.h"
+
+
 sb::RGB::RGB() : r(0), g(0), b(0) {
 
 }

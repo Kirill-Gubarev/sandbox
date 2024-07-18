@@ -2,19 +2,21 @@ cmake_minimum_required(VERSION 3.29 FATAL_ERROR)
 project( sandbox )
 include_directories(src)
 add_executable( ${PROJECT_NAME}
+	issues.txt
 	src/main.cpp
-
 	src/common.cpp			src/common.h
-	src/sbWindow.cpp		src/sbWindow.h
-	src/tile.cpp			src/tile.h
-	src/input.cpp			src/input.h
-	src/render.cpp			src/render.h
-
+	
 	src/game/game.cpp		src/game/game.h
-	src/game/area.cpp		src/game/area.h
+	src/game/sbWindow.cpp	src/game/sbWindow.h
+	src/game/input.cpp		src/game/input.h
+	src/game/render.cpp		src/game/render.h
+	
+	src/area/area.cpp		src/area/area.h
+	src/area/tile.cpp		src/area/tile.h
 
 	src/utilities/vec2d.hpp
 	src/utilities/rgb.cpp src/utilities/rgb.h
 )
+
 add_subdirectory( external/glfw )
 target_link_libraries( ${PROJECT_NAME} glfw )

@@ -1,9 +1,11 @@
-#include "game.h"
-#include "sbWindow.h"
-#include "Input.h"
-#include "tile.h"
-#include "area.h"
-#include "render.h"
+#include "game/game.h"
+#include "game/sbWindow.h"
+#include "game/input.h"
+#include "game/render.h"
+
+#include "area/tile.h"
+#include "area/area.h"
+
 
 void sb::Game::mainLoop() {
 	GLFWwindow* glfwWindow = ptr_sbWindow->getGLFWwindow();

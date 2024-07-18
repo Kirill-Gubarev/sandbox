@@ -1,7 +1,9 @@
 #ifndef VEC2D_HPP
 #define VEC2D_HPP
 
+
 #include "common.h"
+
 
 namespace sb {
 	template <typename T>
@@ -21,4 +23,6 @@ namespace sb {
 
 	};
 }
+
+
 #endif //VEC2D_HPP

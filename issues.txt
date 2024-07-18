@@ -1,0 +1,8 @@
+fps bug:
+	60 is indicated, but actually 66
+
+water bugs:
+	the water does not sleep,
+	as sleeping water leads to an error with flying water
+
+	when the sand falls into the water, the water is teleported up

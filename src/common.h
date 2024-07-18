@@ -1,8 +1,10 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+
 #pragma comment (lib, "opengl32.lib")
 #include <GLFW/glfw3.h>
+
 #include <iostream>
 #include <memory>
 #include <exception>
@@ -11,6 +13,7 @@
 #include <chrono>
 #include <random>
 #include <string>
+
 
 namespace sb {
 	void init();

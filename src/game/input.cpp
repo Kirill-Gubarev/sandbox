@@ -1,6 +1,6 @@
-#include "input.h"
-#include "sbWindow.h"
-#include "game/area.h"
+#include "game/input.h"
+#include "game/sbWindow.h"
+#include "area/area.h"
 
 
 void sb::Input::update() {

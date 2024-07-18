@@ -1,6 +1,6 @@
-#include "area.h"
-#include "sbWindow.h"
-#include "input.h"
+#include "game/sbWindow.h"
+#include "game/input.h"
+#include "area/area.h"
 
 
 sb::Vec2d<int> sb::Area::convertMousePosToAreaPos(sb::Vec2d<double> pos) const {

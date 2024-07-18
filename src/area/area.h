@@ -1,9 +1,11 @@
 #ifndef AREA_H
 #define AREA_H
 
+
 #include "common.h"
-#include "tile.h"
+#include "area/tile.h"
 #include "utilities/vec2d.hpp"
+
 
 namespace sb {
 	//this class manages the game area
@@ -46,5 +48,6 @@ namespace sb {
 	};
 	extern  sb::Area* ptr_area;
 }
+
 
 #endif //AREA_H

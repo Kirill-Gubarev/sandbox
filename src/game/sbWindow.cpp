@@ -1,5 +1,5 @@
-#include "SBWindow.h"
-#include "game/area.h"
+#include "game/SBWindow.h"
+#include "area/area.h"
 
 
 void sb::SBWindow::setWindowSize(int width, int height) {

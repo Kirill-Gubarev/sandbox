@@ -1,8 +1,11 @@
 #ifndef INPUT_H
 #define INPUT_H
 
+
 #include "common.h"
-#include <utilities/vec2d.hpp>
+#include "utilities/vec2d.hpp"
+
+
 namespace sb {
 	//this class manages the input data
 	class Input {
@@ -29,5 +32,6 @@ namespace sb {
 	};
 	extern sb::Input* ptr_input;
 }
+
 
 #endif

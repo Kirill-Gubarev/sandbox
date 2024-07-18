@@ -1,8 +1,11 @@
 #ifndef TILE_H
 #define TILE_H
 
+
 #include "common.h"
 #include "utilities/rgb.h"
+
+
 namespace sb {
 	//the main unit
 	struct Tile {
@@ -48,5 +51,6 @@ namespace sb {
 		void waterUpdate(int x, int y);
 	};
 }
+
 
 #endif //TILE_H

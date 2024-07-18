@@ -1,9 +1,11 @@
 #include "common.h"
-#include "sbWindow.h"
+
 #include "game/game.h"
-#include "game/area.h"
-#include "input.h"
-#include "render.h"
+#include "game/sbWindow.h"
+#include "game/render.h"
+#include "game/input.h"
+
+#include "area/area.h"
 
 
 void sb::init() {

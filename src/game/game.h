@@ -1,8 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
 
+
 #include "common.h"
 #include "utilities/rgb.h"
+
 
 namespace sb {
 	//this class manages the main game logic
@@ -29,5 +31,6 @@ namespace sb {
 	};
 	extern sb::Game* ptr_game;
 }
+
 
 #endif //GAME_H
