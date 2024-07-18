@@ -2,65 +2,68 @@
 #include "game/input.h"
 #include "area/area.h"
 
+//data
+int sb::Area::width = 0;
+int sb::Area::height = 0;
+sb::Tile* sb::Area::ptr_tileArray = nullptr;
 
-sb::Vec2d<int> sb::Area::convertMousePosToAreaPos(sb::Vec2d<double> pos) const {
+//managing this class
+void sb::Area::init(int width, int height) {
+	Area::width = width;
+	Area::height = height;
 
-	//type conversion for accurate calculations
-	sb::Vec2d<double> areaBottomLeft = static_cast<sb::Vec2d<double>>(ptr_sbWindow->getAreaBottomLeft());
-	sb::Vec2d<double> areaTopRight = static_cast<sb::Vec2d<double>>(ptr_sbWindow->getAreaTopRight());
+	//memory allocation
+	int size = width * height;
+	ptr_tileArray = new Tile[size];
 
-	//shift pos.x
-	pos.x = pos.x - ptr_sbWindow->getAreaBottomLeft().x;
-	//pos.x / (width rendering area / width area)
-	pos.x = pos.x / ((areaTopRight.x - areaBottomLeft.x) / static_cast<double>(width));
+	//filling an array with empty values
+	for (int y = 0; y < height; y++)
+		for (int x = 0; x < width; x++)
+ 			ptr_tileArray[x + y * width] = Tile(Tile::Type::empty);
 
-	//inversion pos.y
-	pos.y = ptr_sbWindow->getHeight() - pos.y;
-	//pos.x / (height rendering area / height area)
-	pos.y = pos.y / ((areaTopRight.y - areaBottomLeft.y) / static_cast<double>(height));
-
-	//type conversion for this class, it works with integers
-	return static_cast<sb::Vec2d<int>>(pos);
+	//creating a stone platform
+	for (int y = height / 2; y < height / 2 + 3; ++y)
+		for (int x = width / 2 - 10; x < width / 2 + 10; ++x)
+			setTile(x, y, Tile(Tile::Type::stone));
 }
-void sb::Area::mouseLeftButtonSetTile() {
-	sb::Vec2d<double> mousePos = sb::ptr_input->getMousePosition();
-	sb::Vec2d<int> areaPos = convertMousePosToAreaPos(mousePos);
-
-	if (isInsideTheArea(areaPos)){
-		setTile(areaPos.x, areaPos.y, Tile(Tile::Type::sand));
-		resetTilesSleepNearby(areaPos.x, areaPos.y);
-	}
-}
-void sb::Area::mouseRightButtonSetTile() {
-	sb::Vec2d<double> mousePos = sb::ptr_input->getMousePosition();
-	sb::Vec2d<int> areaPos = convertMousePosToAreaPos(mousePos);
-
-	if (isInsideTheArea(areaPos)){
-		setTile(areaPos.x, areaPos.y, Tile(Tile::Type::water));
-		resetTilesSleepNearby(areaPos.x, areaPos.y);
-	}
+void sb::Area::terminate() {
+	delete[] ptr_tileArray;
 }
 void sb::Area::update() {
-	for (int y = 0; y < height; ++y) {
-		for (int x = 0; x < width; ++x) {
-			getTile(x, y).update(x,y);
-		}
-	}
-	for (int y = 0; y < height; ++y) {
-		for (int x = 0; x < width; ++x) {
+	for (int y = 0; y < height; ++y)
+		for (int x = 0; x < width; ++x)
+			getTile(x, y).update(x, y);
+
+	for (int y = 0; y < height; ++y)
+		for (int x = 0; x < width; ++x)
 			getTile(x, y).resetUpdate();
-		}
+}
+
+//getters
+int sb::Area::getWidth(){
+	return width;
+}
+int sb::Area::getHeight(){
+	return height;
+}
+sb::Tile& sb::Area::getTile(int x, int y) {
+	//exception
+	if (!isInsideTheArea(x, y)) {
+		std::string message = "CLASS AREA: going beyond the area";
+		message += " x: " + std::to_string(x);
+		message += " y: " + std::to_string(y);
+		throw std::exception(message.c_str());
 	}
-}
-bool sb::Area::isInsideTheArea(sb::Vec2d<int> pos) const {
-	return pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height;
-}
-bool sb::Area::isInsideTheArea(int x, int y) const {
-	return x >= 0 && x < width && y >= 0 && y < height;
+
+	return ptr_tileArray[x + y * width];
 }
 
-
-void sb::Area::tileSwap(int x1, int y1, int x2, int y2) {
+//tiles management
+void sb::Area::setTile(int x, int y, sb::Tile newTile) {
+	Tile& l_currentTile = getTile(x, y);
+	l_currentTile = newTile;
+}
+void sb::Area::swapTile(int x1, int y1, int x2, int y2) {
 	sb::Tile& l_tile1 = getTile(x1, y1);
 	sb::Tile& l_tile2 = getTile(x2, y2);
 
@@ -72,72 +75,70 @@ void sb::Area::tileSwap(int x1, int y1, int x2, int y2) {
 	resetTilesSleepNearby(x2, y2);
 }
 void sb::Area::resetTilesSleepNearby(int x, int y) {
+	//more than 1 current position
 	int limitX = x + 1;
 	int limitY = y + 1;
+
+	//if go beyond the border, reduce the coordinate
 	if (limitX >= width)limitX--;
-	else if (x > 0) x--; 
+	//if do not go beyond the border, then can reduce the coordinate
+	else if (x > 0) x--;
+
+	//if go beyond the border, reduce the coordinate
 	if (limitY >= height)limitY--;
+	//if we do not go beyond the border, then we can reduce the coordinate
 	else if (y > 0) y--;
 
-	for (; y < limitY; y++) {
-		for (; x < limitX; x++) {
+	//reset sleep mode
+	for (; y < limitY; y++)
+		for (; x < limitX; x++)
 			getTile(x, y).resetSleep();
-		}
+}
+
+//mouse press
+void sb::Area::setTileMouseLB() {
+	sb::Vec2d<double> mousePos = sb::Input::getMousePosition();
+	sb::Vec2d<int> areaPos = convertMousePosToAreaPos(mousePos);
+
+	//creating sand
+	if (isInsideTheArea(areaPos)) {
+		setTile(areaPos.x, areaPos.y, Tile(Tile::Type::sand));
+		resetTilesSleepNearby(areaPos.x, areaPos.y);
 	}
 }
-sb::Tile& sb::Area::getTile(int x, int y) const {
-	if (!isInsideTheArea(x, y)) {
-		std::string message = "CLASS AREA: going beyond the area";
-		message += " x: " + std::to_string(x);
-		message += " y: " + std::to_string(y);
-		throw std::exception(message.c_str());
-	}
+void sb::Area::setTileMouseRB() {
+	sb::Vec2d<double> mousePos = sb::Input::getMousePosition();
+	sb::Vec2d<int> areaPos = convertMousePosToAreaPos(mousePos);
 
-	return ptr_tileArray[x + y * width];
-}
-void sb::Area::setTile(int x, int y, sb::Tile newTile) {
-	Tile& currentTile = getTile(x, y);
-	currentTile = newTile;
-}
-
-
-sb::Area::~Area() {
-	delete[] ptr_tileArray;
-}
-int sb::Area::getWidth() const {
-	return width;
-}
-int sb::Area::getHeight() const {
-	return height;
-}
-
-
-//singleton pattern
-sb::Area* sb::ptr_area = nullptr;
-std::unique_ptr<sb::Area> sb::Area::ptr_instance(nullptr);
-sb::Area::Area(int width, int height)
-	:width(width), height(height) {
-
-	int size = width * height;
-	ptr_tileArray = static_cast<Tile*>(malloc(sizeof(Tile)*size));
-	for (int y = 0; y < height; y++) {
-		for (int x = 0; x < width; x++) {
-			ptr_tileArray[x + y * width] = Tile(Tile::Type::empty);
-		}
-	}
-	for (int y = height / 2; y < height / 2 + 3; ++y) {
-		for (int x = width / 2 - 10; x < width / 2 + 10; ++x) {
-			setTile(x, y, Tile(Tile::Type::stone));
-		}
+	//creating water
+	if (isInsideTheArea(areaPos)) {
+		setTile(areaPos.x, areaPos.y, Tile(Tile::Type::water));
+		resetTilesSleepNearby(areaPos.x, areaPos.y);
 	}
 }
-sb::Area* sb::Area::getInstance() {
-	return ptr_instance.get();
+
+//coordinate management
+sb::Vec2d<int> sb::Area::convertMousePosToAreaPos(sb::Vec2d<double> pos) {
+	//type conversion for accurate calculations
+	sb::Vec2d<double> areaBottomLeft = static_cast<sb::Vec2d<double>>(sb::SBWindow::getAreaBottomLeft());
+	sb::Vec2d<double> areaTopRight = static_cast<sb::Vec2d<double>>(sb::SBWindow::getAreaTopRight());
+
+	//shift pos.x
+	pos.x = pos.x - sb::SBWindow::getAreaBottomLeft().x;
+	//pos.x / (width rendering area / width area)
+	pos.x = pos.x / ((areaTopRight.x - areaBottomLeft.x) / static_cast<double>(width));
+
+	//inversion pos.y
+	pos.y = sb::SBWindow::getHeight() - pos.y;
+	//pos.x / (height rendering area / height area)
+	pos.y = pos.y / ((areaTopRight.y - areaBottomLeft.y) / static_cast<double>(height));
+
+	//type conversion for this class, it works with integers
+	return static_cast<sb::Vec2d<int>>(pos);
 }
-sb::Area* sb::Area::createInstance(int width, int height) {
-	if (ptr_instance == nullptr) {
-		ptr_instance.reset(new Area(width, height));
-		ptr_area = ptr_instance.get();
-	}
-	return ptr_instance.get();
+bool sb::Area::isInsideTheArea(sb::Vec2d<int> pos) {
+	return pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height;
+}
+bool sb::Area::isInsideTheArea(int x, int y) {
+	return x >= 0 && x < width && y >= 0 && y < height;
 }

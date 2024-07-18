@@ -6,7 +6,9 @@
 
 
 namespace sb {
-	//this class stores the color
+	/// <summary>
+	/// this class stores the color
+	/// </summary>
 	struct RGB {
 		std::uint8_t r, g, b;
 		RGB();

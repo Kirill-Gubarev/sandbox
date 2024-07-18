@@ -7,27 +7,30 @@
 
 
 namespace sb {
+	/// <summary>
+	/// this class renders the game
+	/// </summary>
 	class Render {
+	private:
+		//data
+		static float areaVertices[8];
+
 	public:
-		void update();
-	private:
-		void drawTiles();
-		void drawArea();
-		void setColor(sb::RGB color);
-
-		float areaVertices[8];
-
-		//singleton pattern
-	private:
-		static std::unique_ptr<sb::Render> ptr_instance;
-		Render();
+		//an object of this class cannot be created
+		Render() = delete;
 		Render(const Render&) = delete;
 		void operator =(const Render&) = delete;
-	public:
-		static sb::Render* getInstance();
-		static sb::Render* createInstance();
+
+		//managing this class
+		static void init();
+		static void terminate();
+		static void update();
+
+		//drawing
+		static void drawTiles();
+		static void drawArea();
+		static void setColor(sb::RGB color);
 	};
-	extern sb::Render* ptr_render;
 }
 
 

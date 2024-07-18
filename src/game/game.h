@@ -7,29 +7,28 @@
 
 
 namespace sb {
-	//this class manages the main game logic
+	/// <summary>
+	/// this class manages the main game logic
+	/// </summary>
 	class Game {
+
 	private:
-		const double frameDuration;// 1.0 / 60.0 is 60 FPS
+		//data
+		static const double frameDuration;// 1.0 / 60.0 is 60 FPS
 		//but for some reason it turns out to be 66. 
 		//I don't know how to fix it yet.
 
-	
 	public:
-		void mainLoop();
-
-
-		//singleton pattern
-	private:
-		static std::unique_ptr<sb::Game> ptr_instance;
-		Game();
+		//an object of this class cannot be created
+		Game() = delete;
 		Game(const Game&) = delete;
 		void operator =(const Game&) = delete;
-	public:
-		static sb::Game* getInstance();
-		static sb::Game* createInstance();
+
+		//managing this class
+		static void init();
+		static void terminate();
+		static void mainLoop();
 	};
-	extern sb::Game* ptr_game;
 }
 
 

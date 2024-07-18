@@ -17,7 +17,10 @@
 
 namespace sb {
 	void init();
-	void start();
+	void run();
+	void terminate();
+
+	//exit the program in case of an error
 	void exitProgram(std::exception& ex);
 }
 

@@ -2,44 +2,73 @@
 #include "area/area.h"
 
 
-void sb::SBWindow::setWindowSize(int width, int height) {
-	this->width = width;
-	this->height = height;
+//data
+GLFWwindow* sb::SBWindow::ptr_GLFWwindow = nullptr;
+int sb::SBWindow::width = 0;
+int sb::SBWindow::height = 0;
+//Bottom left corner of the output area
+sb::Vec2d<int> sb::SBWindow::areaBottomLeft = sb::Vec2d<int>();
+//Top right corner of the output area
+sb::Vec2d<int> sb::SBWindow::areaTopRight = sb::Vec2d<int>();
+bool sb::SBWindow::windowOpen = false;
+
+//managing this class
+void sb::SBWindow::init(int width, int height, const char* title){
+	sb::SBWindow::width = width;
+	sb::SBWindow::height = height;
+
+	if (!glfwInit()) 
+		throw std::exception("failed to init glfw");
+
+	ptr_GLFWwindow = glfwCreateWindow(width, height, title, NULL, NULL);
+
+	if (ptr_GLFWwindow == nullptr){
+		glfwTerminate();
+		throw std::exception("failed to create a window");
+	}
+	glfwMakeContextCurrent(ptr_GLFWwindow);
+	windowOpen = true;
+
+	//setting output area
+	changeOutputArea();
+
+	//setting callbacks
+	glfwSetWindowSizeCallback(ptr_GLFWwindow, windowSizeCallback);
+	glfwSetWindowCloseCallback(ptr_GLFWwindow, windowCloseCallback);
+}
+void sb::SBWindow::terminate(){
+
 }
 
-
-int sb::SBWindow::getWidth() const {
+//getters
+int sb::SBWindow::getWidth(){
 	return width;
 }
-int sb::SBWindow::getHeight() const {
+int sb::SBWindow::getHeight(){
 	return height;
 }
-sb::Vec2d<int> sb::SBWindow::getAreaBottomLeft() const {
+sb::Vec2d<int> sb::SBWindow::getAreaBottomLeft(){
 	return areaBottomLeft;
 }
-sb::Vec2d<int> sb::SBWindow::getAreaTopRight() const {
+sb::Vec2d<int> sb::SBWindow::getAreaTopRight(){
 	return areaTopRight;
 }
-GLFWwindow* sb::SBWindow::getGLFWwindow() const {
-	return ptr_glfwWindow;
+GLFWwindow* sb::SBWindow::getGLFWwindow(){
+	return ptr_GLFWwindow;
 }
-
-
-void sb::SBWindow::windowSizeCallback(GLFWwindow* window, int width, int height) {
-	ptr_sbWindow->setWindowSize(width, height);
-	ptr_sbWindow->changeOutputArea();
-}
-void sb::SBWindow::windowCloseCallback(GLFWwindow* window) {
-	ptr_sbWindow->windowOpen = false;
-	std::cout << "windowCloseCallback();" << std::endl;
-}
-bool sb::SBWindow::isWindowOpen() const {
+bool sb::SBWindow::isWindowOpen(){
 	return windowOpen;
 }
-void sb::SBWindow::changeOutputArea() {
 
-	float numberTilesWidth = sb::ptr_area->getWidth();
-	float numberTilesHeight = sb::ptr_area->getHeight();
+//window
+void sb::SBWindow::setWindowSize(int width, int height){
+	sb::SBWindow::width = width;
+	sb::SBWindow::height = height;
+}
+void sb::SBWindow::changeOutputArea(){
+
+	float numberTilesWidth = sb::Area::getWidth();
+	float numberTilesHeight = sb::Area::getHeight();
 
 	float tileWidth = (float)width / numberTilesWidth;
 	float tileHeight = (float)height / numberTilesHeight;
@@ -61,50 +90,21 @@ void sb::SBWindow::changeOutputArea() {
 		drawHeight = numberTilesHeight;
 	}
 
-
 	areaBottomLeft.x = width / 2 - tileSize * numberTilesWidth / 2;
 	areaBottomLeft.y = 0;
 	areaTopRight.x = width / 2 + tileSize * numberTilesWidth / 2;
 	areaTopRight.y = tileSize * numberTilesHeight;
-
 
 	glLoadIdentity();
 	glViewport(areaBottomLeft.x, areaBottomLeft.y, width, height);
 	glOrtho(0, drawWidth, 0, drawHeight, -1, 1);
 }
 
-
-
-//singleton pattern
-sb::SBWindow* sb::ptr_sbWindow = nullptr;
-std::unique_ptr<sb::SBWindow> sb::SBWindow::ptr_instance(nullptr);
-sb::SBWindow::SBWindow(int width, int height, const char* title)
-	:width(width), height(height), areaBottomLeft(), areaTopRight() {
-	if (!glfwInit()) {
-		throw std::exception("failed to init glfw");
-	}
-
-	ptr_glfwWindow = glfwCreateWindow(width, height, title, NULL, NULL);
-
-	if (ptr_glfwWindow == nullptr)
-	{
-		glfwTerminate();
-		throw std::exception("failed to create a window");
-	}
-	windowOpen = true;
-	glfwMakeContextCurrent(ptr_glfwWindow);
-
+//callbacks
+void sb::SBWindow::windowSizeCallback(GLFWwindow* window, int width, int height){
+	setWindowSize(width, height);
 	changeOutputArea();
-	glfwSetWindowSizeCallback(ptr_glfwWindow, windowSizeCallback);
-	glfwSetWindowCloseCallback(ptr_glfwWindow, windowCloseCallback);
 }
-sb::SBWindow* sb::SBWindow::createInstance(int width, int height, const char* title) {
-	if (ptr_instance == nullptr) {
-		ptr_instance.reset(new sb::SBWindow(width, height, title));
-		sb::ptr_sbWindow = ptr_instance.get();
-	}
-	return ptr_instance.get();
-}
-sb::SBWindow* sb::SBWindow::getInstance() {
-	return ptr_instance.get();
+void sb::SBWindow::windowCloseCallback(GLFWwindow* window){
+	windowOpen = false;
 }

@@ -7,41 +7,45 @@
 
 
 namespace sb {
-	//the main unit
+	/// <summary>
+	/// the main unit
+	/// </summary>
 	struct Tile {
+
 	public:
-		enum class Type : std::uint32_t{
+		//the type of this class
+		enum class Type : std::uint32_t { 
 			empty,
 			stone,
 			sand,
 			water
 		};
 
+		//data
 		Type type;
-		bool isEmpty() const;
-		bool isNotEmpty() const;
-
 		sb::RGB color;
-
 		//if the tile is sleeping, then update is not called for it
 		bool sleep;
-		void resetSleep();
-
 		//if the tile has been updated, don't need to do it twice
 		bool hasBeenUpdated;
-		void resetUpdate();
+		//dense particles sink to the bottom (kg / m^3)
+		float density;
 
-		//dense particles sink to the bottom
-		float density; //kg / m^3
+		//constructors
+		Tile();
+		Tile(Type type);
+
+		void update(int x, int y);
+
+		//getters
+		bool isEmpty() const;
+		bool isNotEmpty() const;
 		bool isTheDensityLess(float density);
 		bool isTheDensityGreater(float density);
 
-		void swap();
-
-		Tile();
-		Tile(Type type);
-		void update(int x, int y);
-
+		//resetters
+		void resetSleep();
+		void resetUpdate();
 
 		//STATUS UPDATES
 	private:

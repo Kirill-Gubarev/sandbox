@@ -10,20 +10,34 @@
 
 void sb::init() {
 	try {
-		sb::Area::createInstance(100, 150);
-		sb::Game::createInstance();
-		sb::SBWindow::createInstance(900, 500, "sandbox");
-		sb::Input::createInstance();
-		sb::Render::createInstance();
+		sb::Area::init(100, 150);
+		sb::SBWindow::init(900, 500, "sandbox");
+		sb::Render::init();
+		sb::Input::init();
+		sb::Game::init();
+
+		//random initialization
 		srand(time(nullptr));
 	}
 	catch (std::exception& ex) {
 		sb::exitProgram(ex);
 	}
 }
-void sb::start() {
+void sb::run() {
 	try {
-		sb::Game::getInstance()->mainLoop();
+		sb::Game::mainLoop();
+	}
+	catch (std::exception& ex) {
+		sb::exitProgram(ex);
+	}
+}
+void sb::terminate() {
+	try {
+		sb::Game::terminate();
+		sb::Input::terminate();
+		sb::Render::terminate();
+		sb::SBWindow::terminate();
+		sb::Area::terminate();
 	}
 	catch (std::exception& ex) {
 		sb::exitProgram(ex);
@@ -32,5 +46,5 @@ void sb::start() {
 void sb::exitProgram(std::exception& ex) {
 	std::cerr << "EXCEPTION: " << ex.what() << std::endl;
 	system("pause");
-	exit(0);
+	exit(-1);
 }
