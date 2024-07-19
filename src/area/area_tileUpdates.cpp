@@ -2,18 +2,18 @@
 
 
 //STATUS UPDATES
-void sb::Area::tileUpdate(int x, int y) {
-	Tile& l_tile = getTile(x,y);
+void sb::Area::tileUpdate(Tile& t) {
+
 	//if the tile is sleeping, then update is not called for it
-	if (l_tile.sleep)
+	if (t.sleep)
 		return;
 
 	//if the tile has been updated, don't need to do it twice
-	if (l_tile.hasBeenUpdated)
+	if (t.hasBeenUpdated)
 		return;
-	l_tile.hasBeenUpdated = true;
+	t.hasBeenUpdated = true;
 
-	switch (l_tile.type) {
+	switch (t.type) {
 
 	case Tile::Type::empty:
 		//emptyUpdate();
@@ -24,11 +24,11 @@ void sb::Area::tileUpdate(int x, int y) {
 		break;
 
 	case Tile::Type::sand:
-		sandUpdate(x, y);
+		sandUpdate(t);
 		break;
 
 	case Tile::Type::water:
-		waterUpdate(x, y);
+		waterUpdate(t);
 		break;
 
 	default:
@@ -38,17 +38,17 @@ void sb::Area::tileUpdate(int x, int y) {
 }
 //   emptyUpdate();
 //	 stoneUpdate();
-void sb::Area::sandUpdate(int x, int y) {
-	Tile& l_tile = getTile(x, y);
+void sb::Area::sandUpdate(Tile& t) {
+
 	//bottom area
-	if (y == 0) {
-		l_tile.sleep = true;
+	if (t.y == 0) {
+		t.sleep = true;
 		return;
 	}
 
 	//bottom tile
-	if (sb::Area::getTile(x, y - 1).isTheDensityLess(l_tile.density)) {
-		sb::Area::swapTile(x, y, x, y - 1);
+	if (sb::Area::getTile(t.x, t.y - 1).isTheDensityLess(t.density)) {
+		sb::Area::swapTile(t.x, t.y, t.x, t.y - 1);
 		return;
 	}
 
@@ -56,29 +56,29 @@ void sb::Area::sandUpdate(int x, int y) {
 	bool moveRight = false;
 
 	//bottom left tile
-	if (x > 0 && sb::Area::getTile(x - 1, y - 1).isTheDensityLess(l_tile.density))
+	if (t.x > 0 && sb::Area::getTile(t.x - 1, t.y - 1).isTheDensityLess(t.density))
 		moveLeft = true;
 
 	//bottom right tile
-	if (x + 1 < sb::Area::getWidth() && sb::Area::getTile(x + 1, y - 1).isTheDensityLess(l_tile.density))
+	if (t.x + 1 < sb::Area::getWidth() && sb::Area::getTile(t.x + 1, t.y - 1).isTheDensityLess(t.density))
 		moveRight = true;
 
 	if (moveLeft && moveRight) {
 		// the probability is 50%
-		if (rand() % 2) { sb::Area::swapTile(x, y, x - 1, y - 1);	return; }
-		else { sb::Area::swapTile(x, y, x + 1, y - 1);	return; }
+		if (rand() % 2) { sb::Area::swapTile(t.x, t.y, t.x - 1, t.y - 1);	return; }
+		else			{ sb::Area::swapTile(t.x, t.y, t.x + 1, t.y - 1);	return; }
 	}
-	else if (moveLeft) { sb::Area::swapTile(x, y, x - 1, y - 1);	return; }
-	else if (moveRight) { sb::Area::swapTile(x, y, x + 1, y - 1);	return; }
+	else if (moveLeft)	{ sb::Area::swapTile(t.x, t.y, t.x - 1, t.y - 1);	return; }
+	else if (moveRight) { sb::Area::swapTile(t.x, t.y, t.x + 1, t.y - 1);	return; }
 
 	//if "return" was not called
-	l_tile.sleep = true;
+	t.sleep = true;
 }
-void sb::Area::waterUpdate(int x, int y) {
-	Tile& l_tile = getTile(x, y);
+void sb::Area::waterUpdate(Tile& t) {
+
 	//bottom tile
-	if (y > 0 && sb::Area::getTile(x, y - 1).isTheDensityLess(l_tile.density)) {
-		sb::Area::swapTile(x, y, x, y - 1);
+	if (t.y > 0 && sb::Area::getTile(t.x, t.y - 1).isTheDensityLess(t.density)) {
+		sb::Area::swapTile(t.x, t.y, t.x, t.y - 1);
 		return;
 	}
 
@@ -86,40 +86,43 @@ void sb::Area::waterUpdate(int x, int y) {
 	bool moveRight = false;
 
 	//bottom left tile
-	if (y > 0 && x > 0 && sb::Area::getTile(x - 1, y - 1).isTheDensityLess(l_tile.density))
+	if (t.y > 0 && t.x > 0 && 
+		sb::Area::getTile(t.x - 1, t.y - 1).isTheDensityLess(t.density))
 		moveLeft = true;
 
 	//bottom right tile
-	if (y > 0 && x + 1 < sb::Area::getWidth() && sb::Area::getTile(x + 1, y - 1).isTheDensityLess(l_tile.density))
+	if (t.y > 0 && t.x + 1 < sb::Area::getWidth() 
+		&& sb::Area::getTile(t.x + 1, t.y - 1).isTheDensityLess(t.density))
 		moveRight = true;
 
 	if (moveLeft && moveRight) {
 		// the probability is 50%
-		if (rand() % 2) { sb::Area::swapTile(x, y, x - 1, y - 1);	return; }
-		else { sb::Area::swapTile(x, y, x + 1, y - 1);	return; }
+		if (rand() % 2)	{	sb::Area::swapTile(t.x, t.y, t.x - 1, t.y - 1);	return; }
+		else			{	sb::Area::swapTile(t.x, t.y, t.x + 1, t.y - 1);	return; }
 	}
-	else if (moveLeft) { sb::Area::swapTile(x, y, x - 1, y - 1);	return; }
-	else if (moveRight) { sb::Area::swapTile(x, y, x + 1, y - 1);	return; }
+	else if (moveLeft)	{	sb::Area::swapTile(t.x, t.y, t.x - 1, t.y - 1);	return; }
+	else if (moveRight) {	sb::Area::swapTile(t.x, t.y, t.x + 1, t.y - 1);	return; }
 
 	//reset
 	moveLeft = false;
 	moveRight = false;
 
 	//left tile
-	if (x > 0 && sb::Area::getTile(x - 1, y).isTheDensityLess(l_tile.density))
+	if (t.x > 0 && sb::Area::getTile(t.x - 1, t.y).isTheDensityLess(t.density))
 		moveLeft = true;
 
 	//right tile
-	if (x + 1 < sb::Area::getWidth() && sb::Area::getTile(x + 1, y).isTheDensityLess(l_tile.density))
+	if (t.x + 1 < sb::Area::getWidth() 
+		&& sb::Area::getTile(t.x + 1, t.y).isTheDensityLess(t.density))
 		moveRight = true;
 
 	if (moveLeft && moveRight) {
 		// the probability is 50%
-		if (rand() % 2) { sb::Area::swapTile(x, y, x - 1, y);	return; }
-		else { sb::Area::swapTile(x, y, x + 1, y);	return; }
+		if (rand() % 2) {	sb::Area::swapTile(t.x, t.y, t.x - 1, t.y);	return;	}
+		else			{	sb::Area::swapTile(t.x, t.y, t.x + 1, t.y);	return;	}
 	}
-	else if (moveLeft) { sb::Area::swapTile(x, y, x - 1, y);	return; }
-	else if (moveRight) { sb::Area::swapTile(x, y, x + 1, y);	return; }
+	else if (moveLeft)	{	sb::Area::swapTile(t.x, t.y, t.x - 1, t.y);	return;	}
+	else if (moveRight) {	sb::Area::swapTile(t.x, t.y, t.x + 1, t.y);	return;	}
 
 	//if "return" was not called
 	//the water breaks when add this, I don't know how to fix it yet

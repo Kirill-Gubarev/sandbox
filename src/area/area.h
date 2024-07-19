@@ -51,11 +51,11 @@ namespace sb {
 
 	private:
 		//TILE STATUS UPDATES
-		static void tileUpdate(int x, int y);
+		static void tileUpdate(Tile& t);
 		//			emptyUpdate();
 		//			stoneUpdate();
-		static void sandUpdate(int x, int y);
-		static void waterUpdate(int x, int y);
+		static void sandUpdate(Tile& t);
+		static void waterUpdate(Tile& t);
 	};
 }
 

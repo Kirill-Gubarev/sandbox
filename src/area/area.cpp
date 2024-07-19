@@ -19,12 +19,12 @@ void sb::Area::init(int width, int height) {
 	//filling an array with empty values
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < width; x++)
- 			ptr_tileArray[x + y * width] = Tile(Tile::Type::empty);
+ 			ptr_tileArray[x + y * width] = Tile(Tile::Type::empty, x, y);
 
 	//creating a stone platform
 	for (int y = height / 2; y < height / 2 + 3; ++y)
 		for (int x = width / 2 - 10; x < width / 2 + 10; ++x)
-			setTile(x, y, Tile(Tile::Type::stone));
+			setTile(x, y, Tile(Tile::Type::stone, x, y));
 }
 void sb::Area::terminate() {
 	delete[] ptr_tileArray;
@@ -33,7 +33,7 @@ void sb::Area::update() {
 	//updating tiles
 	for (int y = 0; y < height; ++y)
 		for (int x = 0; x < width; ++x)
-			tileUpdate(x,y);
+			tileUpdate(getTile(x,y));
 
 	//resetting status update
 	for (int y = 0; y < height; ++y)
@@ -71,8 +71,8 @@ void sb::Area::swapTile(int x1, int y1, int x2, int y2) {
 
 	//swapping
 	sb::Tile temp = l_tile1;
-	l_tile1 = l_tile2;
-	l_tile2 = temp;
+	l_tile1.copyWithoutPos(l_tile2);
+	l_tile2.copyWithoutPos(temp);
 
 	resetTilesSleepNearby(x2, y2);
 }
@@ -104,7 +104,7 @@ void sb::Area::setTileMouseLB() {
 
 	//creating sand
 	if (isInsideTheArea(areaPos)) {
-		setTile(areaPos.x, areaPos.y, Tile(Tile::Type::sand));
+		setTile(areaPos.x, areaPos.y, Tile(Tile::Type::sand, areaPos.x, areaPos.y));
 		resetTilesSleepNearby(areaPos.x, areaPos.y);
 	}
 }
@@ -114,7 +114,7 @@ void sb::Area::setTileMouseRB() {
 
 	//creating water
 	if (isInsideTheArea(areaPos)) {
-		setTile(areaPos.x, areaPos.y, Tile(Tile::Type::water));
+		setTile(areaPos.x, areaPos.y, Tile(Tile::Type::water, areaPos.x, areaPos.y));
 		resetTilesSleepNearby(areaPos.x, areaPos.y);
 	}
 }

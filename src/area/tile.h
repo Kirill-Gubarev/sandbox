@@ -22,18 +22,22 @@ namespace sb {
 		};
 
 		//data
+		int x, y;
 		Type type;
 		sb::RGB color;
+		//dense particles sink to the bottom (kg / m^3)
+		float density;
 		//if the tile is sleeping, then update is not called for it
 		bool sleep;
 		//if the tile has been updated, don't need to do it twice
 		bool hasBeenUpdated;
-		//dense particles sink to the bottom (kg / m^3)
-		float density;
+		
 
 		//constructors
 		Tile();
-		Tile(Type type);
+		Tile(int x, int y);
+		Tile(Type type, int x, int y);
+		void copyWithoutPos(const Tile& l_tile);
 
 		//getters
 		bool isEmpty() const;

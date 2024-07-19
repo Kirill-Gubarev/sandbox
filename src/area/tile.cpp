@@ -3,11 +3,14 @@
 
 
 //constructors
-sb::Tile::Tile() :Tile(Type::empty) {
+sb::Tile::Tile() :Tile(Type::empty, -1, -1) {
 
 }
-sb::Tile::Tile(sb::Tile::Type type)
-	:type(type), hasBeenUpdated(false) {
+sb::Tile::Tile(int x, int y) :Tile(Type::empty, x, y) {
+
+}
+sb::Tile::Tile(sb::Tile::Type type, int x, int y)
+	:x(x), y(y), type(type),  hasBeenUpdated(false) {
 
 	switch (type) {
 
@@ -40,7 +43,14 @@ sb::Tile::Tile(sb::Tile::Type type)
 		break;
 	}
 }
-
+void sb::Tile::copyWithoutPos(const Tile& l_tile){
+	//without x, y
+	type = l_tile.type;
+	color = l_tile.color;
+	density = l_tile.density;
+	sleep = l_tile.sleep;
+	hasBeenUpdated = l_tile.hasBeenUpdated;
+}
 //getters
 bool sb::Tile::isEmpty() const {
 	// !0 = true - yes, it is empty
