@@ -35,24 +35,11 @@ namespace sb {
 		Tile();
 		Tile(Type type);
 
-		void update(int x, int y);
-
 		//getters
 		bool isEmpty() const;
 		bool isNotEmpty() const;
 		bool isTheDensityLess(float density);
 		bool isTheDensityGreater(float density);
-
-		//resetters
-		void resetSleep();
-		void resetUpdate();
-
-		//STATUS UPDATES
-	private:
-		//   emptyUpdate();
-		//	 stoneUpdate();
-		void sandUpdate(int x, int y);
-		void waterUpdate(int x, int y);
 	};
 }
 

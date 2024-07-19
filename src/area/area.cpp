@@ -30,13 +30,15 @@ void sb::Area::terminate() {
 	delete[] ptr_tileArray;
 }
 void sb::Area::update() {
+	//updating tiles
 	for (int y = 0; y < height; ++y)
 		for (int x = 0; x < width; ++x)
-			getTile(x, y).update(x, y);
+			tileUpdate(x,y);
 
+	//resetting status update
 	for (int y = 0; y < height; ++y)
 		for (int x = 0; x < width; ++x)
-			getTile(x, y).resetUpdate();
+			getTile(x, y).hasBeenUpdated = false;
 }
 
 //getters
@@ -92,7 +94,7 @@ void sb::Area::resetTilesSleepNearby(int x, int y) {
 	//reset sleep mode
 	for (; y < limitY; y++)
 		for (; x < limitX; x++)
-			getTile(x, y).resetSleep();
+			getTile(x, y).sleep = false;
 }
 
 //mouse press

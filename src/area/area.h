@@ -48,6 +48,14 @@ namespace sb {
 		static sb::Vec2d<int> convertMousePosToAreaPos(sb::Vec2d<double> pos);
 		static bool isInsideTheArea(sb::Vec2d<int> pos);
 		static bool isInsideTheArea(int x, int y);
+
+	private:
+		//TILE STATUS UPDATES
+		static void tileUpdate(int x, int y);
+		//			emptyUpdate();
+		//			stoneUpdate();
+		static void sandUpdate(int x, int y);
+		static void waterUpdate(int x, int y);
 	};
 }
 
