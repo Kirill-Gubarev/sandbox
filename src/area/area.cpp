@@ -1,4 +1,5 @@
 #include "game/sbWindow.h"
+#include "game/render.h"
 #include "game/input.h"
 #include "area/area.h"
 
@@ -122,11 +123,11 @@ void sb::Area::setTileMouseRB() {
 //coordinate management
 sb::Vec2d<int> sb::Area::convertMousePosToAreaPos(sb::Vec2d<double> pos) {
 	//type conversion for accurate calculations
-	sb::Vec2d<double> areaBottomLeft = static_cast<sb::Vec2d<double>>(sb::SBWindow::getAreaBottomLeft());
-	sb::Vec2d<double> areaTopRight = static_cast<sb::Vec2d<double>>(sb::SBWindow::getAreaTopRight());
+	sb::Vec2d<double> areaBottomLeft = static_cast<sb::Vec2d<double>>(sb::Render::getAreaBottomLeft());
+	sb::Vec2d<double> areaTopRight = static_cast<sb::Vec2d<double>>(sb::Render::getAreaTopRight());
 
 	//shift pos.x
-	pos.x = pos.x - sb::SBWindow::getAreaBottomLeft().x;
+	pos.x = pos.x - sb::Render::getAreaBottomLeft().x;
 	//pos.x / (width rendering area / width area)
 	pos.x = pos.x / ((areaTopRight.x - areaBottomLeft.x) / static_cast<double>(width));
 

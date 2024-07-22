@@ -15,7 +15,7 @@ void sb::init() {
 		sb::Render::init();
 		sb::Input::init();
 		sb::Game::init();
-
+		
 		//random initialization
 		srand(time(nullptr));
 	}

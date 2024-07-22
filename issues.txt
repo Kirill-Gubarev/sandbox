@@ -14,8 +14,3 @@ sb::Area::resetTilesSleepNearby(int x, int y):
 	void setTileMouseLB();
 	void setTileMouseRB();
 	doesn't update tiles nearby
-
-
-function void sb::SBWindow::changeOutputArea():
-	I wrote illegible code.
-	It works, but I don't understand how, and how to comment too.

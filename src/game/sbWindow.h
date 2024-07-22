@@ -17,10 +17,6 @@ namespace sb {
 		static GLFWwindow* ptr_GLFWwindow;
 		static int width;
 		static int height;
-		//Bottom left corner of the output area
-		static sb::Vec2d<int> areaBottomLeft;
-		//Top right corner of the output area
-		static sb::Vec2d<int> areaTopRight;
 		static bool windowOpen;
 
 	public:
@@ -36,15 +32,11 @@ namespace sb {
 		//getters
 		static int getWidth();
 		static int getHeight();
-		static sb::Vec2d<int> getAreaBottomLeft();
-		static sb::Vec2d<int> getAreaTopRight();
 		static GLFWwindow* getGLFWwindow();
 		static bool isWindowOpen();
 
 	private:
-		//window
 		static void setWindowSize(int width, int height);
-		static void changeOutputArea();
 
 		//callbacks
 		static void windowSizeCallback(GLFWwindow* window, int width, int height);

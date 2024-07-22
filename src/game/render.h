@@ -4,6 +4,7 @@
 
 #include "common.h"
 #include "utilities/rgb.h"
+#include "utilities/vec2d.hpp"
 
 
 namespace sb {
@@ -14,7 +15,12 @@ namespace sb {
 	private:
 		//data
 		static float areaVertices[8];
+		static float squareVertices[8];
 
+		//Bottom left corner of the output area
+		static sb::Vec2d<int> areaBottomLeft;
+		//Top right corner of the output area
+		static sb::Vec2d<int> areaTopRight;
 	public:
 		//an object of this class cannot be created
 		Render() = delete;
@@ -30,6 +36,12 @@ namespace sb {
 		static void drawTiles();
 		static void drawArea();
 		static void setColor(sb::RGB color);
+
+		static sb::Vec2d<int> getAreaBottomLeft();
+		static sb::Vec2d<int> getAreaTopRight();
+
+		static void changeOutputArea();
+		static void changeOutputArea2();
 	};
 }
 
