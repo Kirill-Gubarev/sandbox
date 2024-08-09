@@ -4,16 +4,18 @@
 #include "game/sbWindow.h"
 #include "game/render.h"
 #include "game/input.h"
+#include "game/GUI.h"
 
 #include "area/area.h"
 
 
 void sb::init() {
 	try {
-		sb::Area::init(100, 150);
+		sb::Area::init(200, 100);
 		sb::SBWindow::init(900, 500, "sandbox");
 		sb::Render::init();
 		sb::Input::init();
+		sb::GUI::init();
 		sb::Game::init();
 		
 		//random initialization
@@ -34,6 +36,7 @@ void sb::run() {
 void sb::terminate() {
 	try {
 		sb::Game::terminate();
+		sb::GUI::terminate();
 		sb::Input::terminate();
 		sb::Render::terminate();
 		sb::SBWindow::terminate();

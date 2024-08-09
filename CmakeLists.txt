@@ -11,6 +11,7 @@ add_executable( ${PROJECT_NAME}
 	src/game/sbWindow.cpp			src/game/sbWindow.h
 	src/game/input.cpp				src/game/input.h
 	src/game/render.cpp				src/game/render.h
+	src/game/GUI.cpp				src/game/GUI.h
 	
 
 	src/area/area.cpp				src/area/area.h

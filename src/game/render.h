@@ -5,6 +5,7 @@
 #include "common.h"
 #include "utilities/rgb.h"
 #include "utilities/vec2d.hpp"
+#include "game/GUI.h"
 
 
 namespace sb {
@@ -34,14 +35,14 @@ namespace sb {
 
 		//drawing
 		static void drawTiles();
-		static void drawArea();
+		static void drawGameArea();
+		static void drawElement(const sb::GUI::Element* ptr_element);
 		static void setColor(sb::RGB color);
 
 		static sb::Vec2d<int> getAreaBottomLeft();
 		static sb::Vec2d<int> getAreaTopRight();
 
-		static void changeOutputArea();
-		static void changeOutputArea2();
+		static void updateOutputArea();
 	};
 }
 

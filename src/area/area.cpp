@@ -133,6 +133,8 @@ sb::Vec2d<int> sb::Area::convertMousePosToAreaPos(sb::Vec2d<double> pos) {
 
 	//inversion pos.y
 	pos.y = sb::SBWindow::getHeight() - pos.y;
+	//shift pos.y
+	pos.y = pos.y - sb::Render::getAreaBottomLeft().y;
 	//pos.x / (height rendering area / height area)
 	pos.y = pos.y / ((areaTopRight.y - areaBottomLeft.y) / static_cast<double>(height));
 

@@ -27,7 +27,7 @@ void sb::SBWindow::init(int width, int height, const char* title){
 	windowOpen = true;
 
 	//setting output area
-	sb::Render::changeOutputArea();
+	sb::Render::updateOutputArea();
 
 	//setting callbacks
 	glfwSetWindowSizeCallback(ptr_GLFWwindow, windowSizeCallback);
@@ -61,7 +61,8 @@ void sb::SBWindow::setWindowSize(int width, int height){
 //callbacks
 void sb::SBWindow::windowSizeCallback(GLFWwindow* window, int width, int height){
 	setWindowSize(width, height);
-	sb::Render::changeOutputArea();
+	sb::Render::updateOutputArea();
+	sb::GUI::updateElementsSize();
 }
 void sb::SBWindow::windowCloseCallback(GLFWwindow* window){
 	windowOpen = false;
