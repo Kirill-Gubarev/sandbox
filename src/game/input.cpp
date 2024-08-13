@@ -1,7 +1,8 @@
 #include "game/input.h"
 #include "game/sbWindow.h"
 #include "area/area.h"
-
+#include "game/GUI.h"
+#include "game/Element.h"
 
 //managing this class
 void sb::Input::init() {
@@ -33,8 +34,11 @@ bool sb::Input::isRBPressed() {
 	return state == GLFW_PRESS;
 }
 void sb::Input::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-		std::cout << "left button press" << std::endl;
-	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-		std::cout << "right button press" << std::endl;
+	double x, y;
+	glfwGetCursorPos(sb::SBWindow::getGLFWwindow(), &x, &y);
+	sb::GUI::ptr_element->mouseAction(
+		x, y,
+		static_cast<sb::GUI::MouseButton>(button),
+		static_cast<sb::GUI::MouseAction>(action)
+	);
 }

@@ -1,8 +1,8 @@
 #include "game/render.h"
 #include "game/sbWindow.h"
 #include "game/GUI.h"
+#include "game/element.h"
 #include "area/area.h"
-
 
 //data
 float sb::Render::areaVertices[8] = {};
@@ -70,10 +70,10 @@ void sb::Render::drawGameArea() {
 }
 void sb::Render::drawElement(const sb::GUI::Element* ptr_element) {
 	glLineWidth(3);
-	setColor(ptr_element->color);
-	glVertexPointer(2, GL_FLOAT, 0, &ptr_element->vertices);
+	setColor(ptr_element->getColor());
+	glVertexPointer(2, GL_FLOAT, 0, ptr_element->getVertices());
 	glDrawArrays(GL_LINE_LOOP, 0, 6);
-	for (auto& el : ptr_element->childs) {
+	for (auto& el : ptr_element-> getChilds()) {
 		glPushMatrix();
 		drawElement(el);
 		glPopMatrix();

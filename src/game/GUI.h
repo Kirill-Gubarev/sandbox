@@ -14,32 +14,18 @@ namespace sb {
 			vertical,
 			horizontal
 		};
-		class Element {
-		public:
-			float x, y;
-			float width, height;
-			float vertices[12];
-			sb::RGB color;
-			std::vector<Element*> childs;
-			Mode mode;
-			Element();
-			Element(float width, float height, sb::RGB color, Mode mode);
-			~Element();
-			void setLocation(float x, float y, float width, float height);
-			virtual void updateChildSize();
+		enum class MouseButton : std::uint32_t {
+			left = 0,
+			right,
+			middle
 		};
-		class List : public Element {
-		public:
-			Mode orientation;
-			List(float width, float height, sb::RGB color, Mode mode, Mode orientation);
-			void updateChildSize() override;
-		}; 
-		class DockPanel : public Element {
-
+		enum class MouseAction : std::uint32_t {
+			release = 0,
+			press
 		};
-		class Button : public Element {
-
-		};
+		class Element;
+		class List;
+		class Button;
 		static Element* ptr_element;
 
 		//an object of this class cannot be created
