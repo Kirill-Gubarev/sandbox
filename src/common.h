@@ -1,7 +1,6 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-
 #pragma comment (lib, "opengl32.lib")
 #include <GLFW/glfw3.h>
 
@@ -15,6 +14,8 @@
 #include <string>
 #include <vector>
 
+#include "utilities/rgb.h"
+#include "utilities/vec2.hpp"
 
 namespace sb {
 	void init();
@@ -24,6 +25,5 @@ namespace sb {
 	//exit the program in case of an error
 	void exitProgram(std::exception& ex);
 }
-
 
 #endif //COMMON_H

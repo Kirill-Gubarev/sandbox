@@ -1,16 +1,11 @@
 #ifndef AREA_H
 #define AREA_H
 
-
 #include "common.h"
 #include "area/tile.h"
-#include "utilities/vec2d.hpp"
-
 
 namespace sb {
-	/// <summary>
 	/// this class manages the game area
-	/// </summary>
 	class Area {
 
 	private:
@@ -45,8 +40,8 @@ namespace sb {
 		static void setTileMouseRB();
 
 		//coordinate management
-		static sb::Vec2d<int> convertMousePosToAreaPos(sb::Vec2d<double> pos);
-		static bool isInsideTheArea(sb::Vec2d<int> pos);
+		static uts::Vec2<int> convertMousePosToAreaPos(uts::Vec2<double> pos);
+		static bool isInsideTheArea(uts::Vec2<int> pos);
 		static bool isInsideTheArea(int x, int y);
 
 	private:
@@ -58,6 +53,5 @@ namespace sb {
 		static void waterUpdate(Tile& t);
 	};
 }
-
 
 #endif //AREA_H

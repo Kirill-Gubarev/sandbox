@@ -1,17 +1,11 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-
 #include "common.h"
-#include "utilities/vec2d.hpp"
-
 
 namespace sb {
-	/// <summary>
 	/// this class manages the input data
-	/// </summary>
 	class Input {
-
 	public:
 		//an object of this class cannot be created
 		Input() = delete;
@@ -24,7 +18,7 @@ namespace sb {
 		static void update();
 
 		//mouse
-		static sb::Vec2d<double> getMousePosition();
+		static uts::Vec2<double> getMousePosition();
 		//is the left mouse button pressed
 		static bool isLBPressed();
 		//is the right mouse button pressed
@@ -33,6 +27,5 @@ namespace sb {
 		static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 	};
 }
-
 
 #endif //INPUT_H

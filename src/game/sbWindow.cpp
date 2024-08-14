@@ -2,7 +2,6 @@
 #include "game/render.h"
 #include "area/area.h"
 
-
 //data
 GLFWwindow* sb::SBWindow::ptr_GLFWwindow = nullptr;
 int sb::SBWindow::width = 0;
@@ -62,7 +61,7 @@ void sb::SBWindow::setWindowSize(int width, int height){
 void sb::SBWindow::windowSizeCallback(GLFWwindow* window, int width, int height){
 	setWindowSize(width, height);
 	sb::Render::updateOutputArea();
-	sb::GUI::updateElementsSize();
+	gui::GUI::updateElementsSize();
 }
 void sb::SBWindow::windowCloseCallback(GLFWwindow* window){
 	windowOpen = false;

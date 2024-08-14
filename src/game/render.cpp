@@ -1,16 +1,17 @@
 #include "game/render.h"
 #include "game/sbWindow.h"
-#include "game/GUI.h"
-#include "game/element.h"
+
+#include "GUI/element.h"
+
 #include "area/area.h"
 
 //data
 float sb::Render::areaVertices[8] = {};
 float sb::Render::squareVertices[8] = {};
 //Bottom left corner of the output area
-sb::Vec2d<int> sb::Render::areaBottomLeft = sb::Vec2d<int>();
+uts::Vec2<int> sb::Render::areaBottomLeft = uts::Vec2<int>();
 //Top right corner of the output area
-sb::Vec2d<int> sb::Render::areaTopRight = sb::Vec2d<int>();
+uts::Vec2<int> sb::Render::areaTopRight = uts::Vec2<int>();
 
 //managing this class
 void sb::Render::init() {
@@ -36,7 +37,7 @@ void sb::Render::update() {
 
 	drawGameArea();
 	drawTiles();
-	drawElement(sb::GUI::ptr_element);
+	drawElement(gui::GUI::ptr_element);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glfwSwapBuffers(sb::SBWindow::getGLFWwindow());
@@ -68,7 +69,7 @@ void sb::Render::drawGameArea() {
 	glVertexPointer(2, GL_FLOAT, 0, &areaVertices);
 	glDrawArrays(GL_LINE_LOOP, 0, 4);
 }
-void sb::Render::drawElement(const sb::GUI::Element* ptr_element) {
+void sb::Render::drawElement(const gui::GUI::Element* ptr_element) {
 	glLineWidth(3);
 	setColor(ptr_element->getColor());
 	glVertexPointer(2, GL_FLOAT, 0, ptr_element->getVertices());
@@ -79,14 +80,14 @@ void sb::Render::drawElement(const sb::GUI::Element* ptr_element) {
 		glPopMatrix();
 	}
 }
-void sb::Render::setColor(sb::RGB color) {
-	glColor3ub(color.r, color.g, color.b);
+void sb::Render::setColor(uts::RGB color) {
+	glColor3ub(color.R, color.G, color.B);
 }
 
-sb::Vec2d<int> sb::Render::getAreaBottomLeft() {
+uts::Vec2<int> sb::Render::getAreaBottomLeft() {
 	return areaBottomLeft;
 }
-sb::Vec2d<int> sb::Render::getAreaTopRight() {
+uts::Vec2<int> sb::Render::getAreaTopRight() {
 	return areaTopRight;
 }
 
@@ -135,10 +136,10 @@ void sb::Render::updateOutputArea() {
 	float gameAreaWidthCenter = tileSize * numberTilesWidth / 2;
 	float gameAreaHeightCenter = tileSize * numberTilesHeight / 2;
 
-	areaBottomLeft.x = windowWidthCenter - gameAreaWidthCenter;
-	areaBottomLeft.y = windowHeightCenter - gameAreaHeightCenter;
-	areaTopRight.x = windowWidthCenter + gameAreaWidthCenter;
-	areaTopRight.y = windowHeightCenter + gameAreaHeightCenter;
+	areaBottomLeft.X = windowWidthCenter - gameAreaWidthCenter;
+	areaBottomLeft.Y = windowHeightCenter - gameAreaHeightCenter;
+	areaTopRight.X = windowWidthCenter + gameAreaWidthCenter;
+	areaTopRight.Y = windowHeightCenter + gameAreaHeightCenter;
 
 
 	//moving the world coordinates to the center and

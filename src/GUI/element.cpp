@@ -1,16 +1,16 @@
-#include "element.h"
+#include "GUI/element.h"
 
-sb::GUI::Element::Element() :Element(1, 1, sb::RGB(255, 255, 255), Mode::fill) {}
-sb::GUI::Element::Element(float width, float height, sb::RGB color, Mode mode)
+gui::GUI::Element::Element() :Element(1, 1, uts::RGB(255, 255, 255), Mode::fill) {}
+gui::GUI::Element::Element(float width, float height, uts::RGB color, Mode mode)
 	: color(color), mode(mode) {
 	setLocation(0, 0, width, height);
 }
-sb::GUI::Element::~Element() {
+gui::GUI::Element::~Element() {
 	size_t count = childs.size();
 	for (size_t i = 0; i < count; i++)
 		delete childs[i];
 }
-void sb::GUI::Element::setLocation(float x, float y, float width, float height) {
+void gui::GUI::Element::setLocation(float x, float y, float width, float height) {
 	this->X = x;
 	this->Y = y;
 	this->width = width;
@@ -23,20 +23,20 @@ void sb::GUI::Element::setLocation(float x, float y, float width, float height) 
 	vertices[10] = x + width;		vertices[11] = y + height;
 }
 
-const float* sb::GUI::Element::getVertices() const {
+const float* gui::GUI::Element::getVertices() const {
 	return vertices;
 }
-const sb::RGB sb::GUI::Element::getColor() const {
+const uts::RGB gui::GUI::Element::getColor() const {
 	return color;
 }
-const std::vector<sb::GUI::Element*>& sb::GUI::Element::getChilds() const {
+const std::vector<gui::GUI::Element*>& gui::GUI::Element::getChilds() const {
 	return childs;
 }
-sb::GUI::Element& sb::GUI::Element::operator[](size_t index) const {
+gui::GUI::Element& gui::GUI::Element::operator[](size_t index) const {
 	return *childs[index];
 }
 
-void sb::GUI::Element::mouseAction(float x, float y, MouseButton button, MouseAction action)const {
+void gui::GUI::Element::mouseAction(float x, float y, MouseButton button, MouseAction action)const {
 	for (auto& el : childs) {
 		if (el->isInside(x, y)) {
 			el->mouseAction(x, y, button, action);
@@ -45,11 +45,11 @@ void sb::GUI::Element::mouseAction(float x, float y, MouseButton button, MouseAc
 	}
 }
 
-const bool sb::GUI::Element::isInside(float x, float y) const {
+const bool gui::GUI::Element::isInside(float x, float y) const {
 	return (x >= X && y >= Y) && (x < X + width && y < Y + height);
 }
 
-void sb::GUI::Element::updateChildSize() {
+void gui::GUI::Element::updateChildSize() {
 	for (auto& el : childs) {
 		switch (el->mode) {
 		case Mode::fill:
@@ -62,6 +62,6 @@ void sb::GUI::Element::updateChildSize() {
 		}
 	}
 }
-void sb::GUI::Element::addChild(Element* ptr_element) {
+void gui::GUI::Element::addChild(Element* ptr_element) {
 	childs.push_back(ptr_element);
 }

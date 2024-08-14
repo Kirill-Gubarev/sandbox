@@ -1,12 +1,10 @@
 #ifndef GUI_H
 #define GUI_H
 
-
 #include "common.h"
-#include "utilities/rgb.h"
-#include "utilities/vec2d.hpp"
 
-namespace sb {
+namespace gui {
+	//graphical user interface
 	class GUI {
 	public:
 		enum class Mode : std::uint32_t {
@@ -40,6 +38,5 @@ namespace sb {
 		static void updateElementsSize();
 	};
 }
-
 
 #endif //GUI_H

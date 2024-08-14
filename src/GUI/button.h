@@ -1,10 +1,11 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#include "game/GUI.h"
-#include "game/Element.h"
+#include "GUI/GUI.h"
+#include "GUI/Element.h"
 
-namespace sb {
+namespace gui {
+	//this class can perform actions
 	class GUI::Button : public GUI::Element {
 	protected:
 		//functions
@@ -16,7 +17,7 @@ namespace sb {
 	public:
 		//constructors
 		Button();
-		Button(float width, float height, sb::RGB color, Mode mode);
+		Button(float width, float height, uts::RGB color, Mode mode);
 
 		void clearFunctions();
 

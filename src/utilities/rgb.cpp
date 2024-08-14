@@ -1,10 +1,9 @@
 #include "utilities/rgb.h"
 
-
-sb::RGB::RGB() : r(0), g(0), b(0) {
+uts::RGB::RGB() : R(0), G(0), B(0) {
 
 }
-sb::RGB::RGB(std::uint8_t r, std::uint8_t g, std::uint8_t b)
-	: r(r), g(g), b(b) {
+uts::RGB::RGB(std::uint8_t r, std::uint8_t g, std::uint8_t b)
+	: R(r), G(g), B(b) {
 
 }

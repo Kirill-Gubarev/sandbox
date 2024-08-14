@@ -4,7 +4,8 @@
 #include "game/sbWindow.h"
 #include "game/render.h"
 #include "game/input.h"
-#include "game/GUI.h"
+
+#include "GUI/GUI.h"
 
 #include "area/area.h"
 
@@ -15,7 +16,7 @@ void sb::init() {
 		sb::SBWindow::init(900, 500, "sandbox");
 		sb::Render::init();
 		sb::Input::init();
-		sb::GUI::init();
+		gui::GUI::init();
 		sb::Game::init();
 		
 		//random initialization
@@ -36,7 +37,7 @@ void sb::run() {
 void sb::terminate() {
 	try {
 		sb::Game::terminate();
-		sb::GUI::terminate();
+		gui::GUI::terminate();
 		sb::Input::terminate();
 		sb::Render::terminate();
 		sb::SBWindow::terminate();

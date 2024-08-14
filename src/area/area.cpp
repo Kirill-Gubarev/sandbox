@@ -100,50 +100,58 @@ void sb::Area::resetTilesSleepNearby(int x, int y) {
 
 //mouse press
 void sb::Area::setTileMouseLB() {
-	sb::Vec2d<double> mousePos = sb::Input::getMousePosition();
-	sb::Vec2d<int> areaPos = convertMousePosToAreaPos(mousePos);
+	uts::Vec2<double> mousePos = sb::Input::getMousePosition();
+	uts::Vec2<int> areaPos = convertMousePosToAreaPos(mousePos);
 
 	//creating sand
 	if (isInsideTheArea(areaPos)) {
-		setTile(areaPos.x, areaPos.y, Tile(Tile::Type::sand, areaPos.x, areaPos.y));
-		resetTilesSleepNearby(areaPos.x, areaPos.y);
+		setTile(areaPos.X, areaPos.Y, Tile(Tile::Type::sand, areaPos.X, areaPos.Y));
+		resetTilesSleepNearby(areaPos.X, areaPos.Y);
 	}
 }
 void sb::Area::setTileMouseRB() {
-	sb::Vec2d<double> mousePos = sb::Input::getMousePosition();
-	sb::Vec2d<int> areaPos = convertMousePosToAreaPos(mousePos);
+	uts::Vec2<double> mousePos = sb::Input::getMousePosition();
+	uts::Vec2<int> areaPos = convertMousePosToAreaPos(mousePos);
 
 	//creating water
 	if (isInsideTheArea(areaPos)) {
-		setTile(areaPos.x, areaPos.y, Tile(Tile::Type::water, areaPos.x, areaPos.y));
-		resetTilesSleepNearby(areaPos.x, areaPos.y);
+		setTile(areaPos.X, areaPos.Y, Tile(Tile::Type::water, areaPos.X, areaPos.Y));
+		resetTilesSleepNearby(areaPos.X, areaPos.Y);
 	}
 }
 
 //coordinate management
-sb::Vec2d<int> sb::Area::convertMousePosToAreaPos(sb::Vec2d<double> pos) {
+uts::Vec2<int> sb::Area::convertMousePosToAreaPos(uts::Vec2<double> pos) {
 	//type conversion for accurate calculations
-	sb::Vec2d<double> areaBottomLeft = static_cast<sb::Vec2d<double>>(sb::Render::getAreaBottomLeft());
-	sb::Vec2d<double> areaTopRight = static_cast<sb::Vec2d<double>>(sb::Render::getAreaTopRight());
+	uts::Vec2<double> areaBottomLeft = static_cast<uts::Vec2<double>>(sb::Render::getAreaBottomLeft());
+	uts::Vec2<double> areaTopRight = static_cast<uts::Vec2<double>>(sb::Render::getAreaTopRight());
 
 	//shift pos.x
-	pos.x = pos.x - sb::Render::getAreaBottomLeft().x;
+	pos.X = pos.X - sb::Render::getAreaBottomLeft().X;
 	//pos.x / (width rendering area / width area)
-	pos.x = pos.x / ((areaTopRight.x - areaBottomLeft.x) / static_cast<double>(width));
+	pos.X = pos.X / ((areaTopRight.X - areaBottomLeft.X) / static_cast<double>(width));
 
 	//inversion pos.y
-	pos.y = sb::SBWindow::getHeight() - pos.y;
+	pos.Y = sb::SBWindow::getHeight() - pos.Y;
 	//shift pos.y
-	pos.y = pos.y - sb::Render::getAreaBottomLeft().y;
+	pos.Y = pos.Y - sb::Render::getAreaBottomLeft().Y;
 	//pos.x / (height rendering area / height area)
-	pos.y = pos.y / ((areaTopRight.y - areaBottomLeft.y) / static_cast<double>(height));
+	pos.Y = pos.Y / ((areaTopRight.Y - areaBottomLeft.Y) / static_cast<double>(height));
 
 	//type conversion for this class, it works with integers
-	return static_cast<sb::Vec2d<int>>(pos);
+	return static_cast<uts::Vec2<int>>(pos);
 }
-bool sb::Area::isInsideTheArea(sb::Vec2d<int> pos) {
-	return pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height;
+bool sb::Area::isInsideTheArea(uts::Vec2<int> pos) {
+	return 
+		pos.X >= 0 && 
+		pos.X < width && 
+		pos.Y >= 0 && 
+		pos.Y < height;
 }
 bool sb::Area::isInsideTheArea(int x, int y) {
-	return x >= 0 && x < width && y >= 0 && y < height;
+	return 
+		x >= 0 && 
+		x < width && 
+		y >= 0 && 
+		y < height;
 }

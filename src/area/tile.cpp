@@ -1,7 +1,6 @@
 #include "area/tile.h"
 #include "area/area.h"
 
-
 //constructors
 sb::Tile::Tile() :Tile(Type::empty, -1, -1) {
 
@@ -15,25 +14,25 @@ sb::Tile::Tile(sb::Tile::Type type, int x, int y)
 	switch (type) {
 
 	case Tile::Type::empty:
-		color = sb::RGB(0, 0, 0);
+		color = uts::RGB(0, 0, 0);
 		sleep = true; //sleeps forever
 		density = 0;
 		break;
 
 	case Tile::Type::stone:
-		color = sb::RGB(180, 180, 180);
+		color = uts::RGB(180, 180, 180);
 		sleep = true; //sleeps forever
 		density = 2200;
 		break;
 
 	case Tile::Type::sand:
-		color = sb::RGB(255, 255, 0);
+		color = uts::RGB(255, 255, 0);
 		sleep = false;
 		density = 1700;
 		break;
 
 	case Tile::Type::water:
-		color = sb::RGB(0, 0, 255);
+		color = uts::RGB(0, 0, 255);
 		sleep = false;
 		density = 997;
 		break;

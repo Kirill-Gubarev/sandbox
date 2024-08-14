@@ -6,7 +6,6 @@
 #include "area/tile.h"
 #include "area/area.h"
 
-
 //data
 const double sb::Game::frameDuration = 1.0/60.0;// 1.0 / 60.0 is 60 FPS
 //but for some reason it turns out to be 66. 

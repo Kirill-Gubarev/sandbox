@@ -1,27 +1,29 @@
 #ifndef ELEMENT_H
 #define ELEMENT_H
 
-#include "game/GUI.h"
+#include "GUI/GUI.h"
 
-namespace sb {
+namespace gui {
+	//base class
 	class GUI::Element {
 	protected:
 		//data
 		float X, Y;
 		float width, height;
 		float vertices[12];
-		sb::RGB color;
+		uts::RGB color;
 		Mode mode;
 		std::vector<Element*> childs;
+
 	public:
 		//constructors and destructor
 		Element();
-		Element(float width, float height, sb::RGB color, Mode mode);
+		Element(float width, float height, uts::RGB color, Mode mode);
 		~Element();
 
 		//getters
 		const float* getVertices() const;
-		const sb::RGB getColor() const;
+		const uts::RGB getColor() const;
 		const std::vector<Element*>& getChilds() const;
 		Element& operator[](size_t index) const;
 

@@ -1,17 +1,11 @@
 #ifndef GAME_H
 #define GAME_H
 
-
 #include "common.h"
-#include "utilities/rgb.h"
-
 
 namespace sb {
-	/// <summary>
 	/// this class manages the main game logic
-	/// </summary>
 	class Game {
-
 	private:
 		//data
 		static const double frameDuration;// 1.0 / 60.0 is 60 FPS
@@ -30,6 +24,5 @@ namespace sb {
 		static void mainLoop();
 	};
 }
-
 
 #endif //GAME_H

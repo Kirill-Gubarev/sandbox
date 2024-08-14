@@ -1,6 +1,5 @@
 #include "area.h"
 
-
 //STATUS UPDATES
 void sb::Area::tileUpdate(Tile& t) {
 

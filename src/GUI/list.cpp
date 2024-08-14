@@ -1,15 +1,15 @@
-#include "game/list.h"
+#include "GUI/list.h"
 
-sb::GUI::List::List()
+gui::GUI::List::List()
 	:Element(), orientation(Mode::vertical) {
 
 }
-sb::GUI::List::List(float width, float height, sb::RGB color, Mode mode, Mode orientation)
+gui::GUI::List::List(float width, float height, uts::RGB color, Mode mode, Mode orientation)
 	:Element(width, height, color, mode), orientation(orientation) {
 
 }
 
-void sb::GUI::List::updateChildSize() {
+void gui::GUI::List::updateChildSize() {
 	int numberElements = childs.size();
 	float elementsWidth;
 	float elementsHeight;

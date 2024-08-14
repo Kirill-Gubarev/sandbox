@@ -1,10 +1,10 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include "game/GUI.h"
-#include "game/Element.h"
+#include "GUI/GUI.h"
+#include "GUI/Element.h"
 
-namespace sb {
+namespace gui {
 	//this class stores items in columns
 	class GUI::List : public GUI::Element {
 	protected:
@@ -13,7 +13,7 @@ namespace sb {
 	public:
 		//constructors
 		List();
-		List(float width, float height, sb::RGB color, Mode mode, Mode orientation);
+		List(float width, float height, uts::RGB color, Mode mode, Mode orientation);
 
 		void updateChildSize() override;
 	};

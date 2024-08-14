@@ -1,17 +1,11 @@
 #ifndef TILE_H
 #define TILE_H
 
-
 #include "common.h"
-#include "utilities/rgb.h"
-
 
 namespace sb {
-	/// <summary>
 	/// the main unit
-	/// </summary>
 	struct Tile {
-
 	public:
 		//the type of this class
 		enum class Type : std::uint32_t { 
@@ -24,7 +18,7 @@ namespace sb {
 		//data
 		int x, y;
 		Type type;
-		sb::RGB color;
+		uts::RGB color;
 		//dense particles sink to the bottom (kg / m^3)
 		float density;
 		//if the tile is sleeping, then update is not called for it
@@ -46,6 +40,5 @@ namespace sb {
 		bool isTheDensityGreater(float density);
 	};
 }
-
 
 #endif //TILE_H

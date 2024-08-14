@@ -1,15 +1,10 @@
 #ifndef SBWINDOW_H
 #define SBWINDOW_H
 
-
 #include "common.h"
-#include "utilities/vec2d.hpp"
-
 
 namespace sb {
-	/// <summary>
 	/// this class is the wrapper for GLFWwindow
-	/// </summary>
 	class SBWindow {
 
 		//data
@@ -43,6 +38,5 @@ namespace sb {
 		static void windowCloseCallback(GLFWwindow* window);
 	};
 }
-
 
 #endif //SBWINDOW_H

@@ -11,19 +11,21 @@ add_executable( ${PROJECT_NAME}
 	src/game/sbWindow.cpp			src/game/sbWindow.h
 	src/game/input.cpp				src/game/input.h
 	src/game/render.cpp				src/game/render.h
-	src/game/GUI.cpp				src/game/GUI.h
-	src/game/element.cpp			src/game/element.h
-	src/game/button.cpp				src/game/button.h
-	src/game/list.cpp				src/game/list.h
 
 
+	src/GUI/GUI.cpp					src/GUI/GUI.h
+	src/GUI/element.cpp				src/GUI/element.h
+	src/GUI/button.cpp				src/GUI/button.h
+	src/GUI/list.cpp				src/GUI/list.h
+
+
+	src/area/tile.cpp				src/area/tile.h
 	src/area/area.cpp				src/area/area.h
 	src/area/area_tileUpdates.cpp
-	src/area/tile.cpp				src/area/tile.h
 
 
-	src/utilities/vec2d.hpp
 	src/utilities/rgb.cpp			src/utilities/rgb.h
+	src/utilities/vec2.hpp
 )
 
 add_subdirectory( external/glfw )
