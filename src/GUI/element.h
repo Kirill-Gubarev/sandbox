@@ -8,8 +8,8 @@ namespace gui {
 	class GUI::Element {
 	protected:
 		//data
-		float X, Y;
-		float width, height;
+		Point2D pos, size;
+		Point2D min, max;
 		float vertices[12];
 		uts::RGB color;
 		Mode mode;
@@ -18,20 +18,28 @@ namespace gui {
 	public:
 		//constructors and destructor
 		Element();
-		Element(float width, float height, uts::RGB color, Mode mode);
+		Element(Point2D size, uts::RGB color, Mode mode);
 		~Element();
 
 		//getters
 		const float* getVertices() const;
-		const uts::RGB getColor() const;
 		const std::vector<Element*>& getChilds() const;
+		uts::RGB getColor() const;
+		Point2D getMin() const;
+		Point2D getMax() const;
 		Element& operator[](size_t index) const;
 
-		virtual void mouseAction(float x, float y, MouseButton button, MouseAction action) const;
+		//setters
+		Element* setLocation(Point2D newPos, Point2D newSize);
+		Element* setMin(float width, float height);
+		Element* setMax(float width, float height);
+		Element* setSize(float width, float height);
+
+		virtual void mouseAction(Point2D pos, MouseButton button, MouseAction action) const;
 		const bool isInside(float x, float y) const;
-		void setLocation(float x, float y, float width, float height);
-		void addChild(Element* ptr_element);
-		virtual void updateChildSize();
+
+		Element* addChild(Element* ptr_element);
+		virtual void updateChildLocation();
 	};
 }
 

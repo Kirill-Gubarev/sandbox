@@ -1,59 +1,91 @@
 #include "GUI/element.h"
 
-gui::GUI::Element::Element() :Element(1, 1, uts::RGB(255, 255, 255), Mode::fill) {}
-gui::GUI::Element::Element(float width, float height, uts::RGB color, Mode mode)
+gui::GUI::Element::Element() :Element(Point2D(1, 1), uts::RGB(255, 255, 255), Mode::fill) {}
+gui::GUI::Element::Element(Point2D size, uts::RGB color, Mode mode)
 	: color(color), mode(mode) {
-	setLocation(0, 0, width, height);
+	setMin(0, 0);
+	setMax(
+		std::numeric_limits<float>::infinity(), 
+		std::numeric_limits<float>::infinity()
+	);
+	setLocation(Point2D(0, 0), size);
 }
 gui::GUI::Element::~Element() {
 	size_t count = childs.size();
 	for (size_t i = 0; i < count; i++)
 		delete childs[i];
+	childs.clear();
 }
-void gui::GUI::Element::setLocation(float x, float y, float width, float height) {
-	this->X = x;
-	this->Y = y;
-	this->width = width;
-	this->height = height;
-	vertices[0] = x;				vertices[1] = y;
-	vertices[2] = x + width;		vertices[3] = y;
-	vertices[4] = x + width;		vertices[5] = y + height;
-	vertices[6] = x;				vertices[7] = y;
-	vertices[8] = x;				vertices[9] = y + height;
-	vertices[10] = x + width;		vertices[11] = y + height;
+gui::GUI::Element* gui::GUI::Element::setLocation(Point2D newPos, Point2D newSize) {
+	pos.X = newPos.X;
+	pos.Y = newPos.Y;
+	setSize(newSize.width, newSize.height);
+	vertices[0] = pos.X;				vertices[1] = pos.Y;
+	vertices[2] = pos.X + size.width;	vertices[3] = pos.Y;
+	vertices[4] = pos.X + size.width;	vertices[5] = pos.Y + size.height;
+	vertices[6] = pos.X;				vertices[7] = pos.Y;
+	vertices[8] = pos.X;				vertices[9] = pos.Y + size.height;
+	vertices[10] = pos.X + size.width;	vertices[11] = pos.Y + size.height;
+	return this;
+}
+gui::GUI::Element* gui::GUI::Element::setMin(float width, float height) {
+	if (width >= 0) min.width = std::min(width, max.width);
+	if (height >= 0) min.height = std::min(height, max.height);
+	return this;
+}
+gui::GUI::Element* gui::GUI::Element::setMax(float width, float height) {
+	max.width = std::max(width, min.width);
+	max.height = std::max(height, min.height);
+	return this;
+}
+gui::GUI::Element* gui::GUI::Element::setSize(float width, float height) {
+	//the values should not exceed the limits of min max
+	size.width = std::clamp(width, min.width, max.width);
+	size.height = std::clamp(height, min.height, max.height);
+	return this;
 }
 
 const float* gui::GUI::Element::getVertices() const {
 	return vertices;
 }
-const uts::RGB gui::GUI::Element::getColor() const {
-	return color;
-}
 const std::vector<gui::GUI::Element*>& gui::GUI::Element::getChilds() const {
 	return childs;
+}
+uts::RGB gui::GUI::Element::getColor() const {
+	return color;
+}
+gui::Point2D gui::GUI::Element::getMin() const {
+	return min;
+}
+gui::Point2D gui::GUI::Element::getMax() const {
+	return max;
 }
 gui::GUI::Element& gui::GUI::Element::operator[](size_t index) const {
 	return *childs[index];
 }
 
-void gui::GUI::Element::mouseAction(float x, float y, MouseButton button, MouseAction action)const {
+void gui::GUI::Element::mouseAction(Point2D pos, MouseButton button, MouseAction action)const {
 	for (auto& el : childs) {
-		if (el->isInside(x, y)) {
-			el->mouseAction(x, y, button, action);
+		if (el->isInside(pos.X, pos.Y)) {
+			el->mouseAction(pos, button, action);
 			return;
 		}
 	}
 }
 
 const bool gui::GUI::Element::isInside(float x, float y) const {
-	return (x >= X && y >= Y) && (x < X + width && y < Y + height);
+	return
+		x >= pos.X &&
+		y >= pos.Y &&
+		x <= pos.X + size.width &&
+		y <= pos.Y + size.height;
 }
 
-void gui::GUI::Element::updateChildSize() {
+void gui::GUI::Element::updateChildLocation() {
 	for (auto& el : childs) {
 		switch (el->mode) {
 		case Mode::fill:
-			el->setLocation(0, 0, width, height);
+			el->setLocation(Point2D(0, 0), size);
 			break;
 
 		default:
@@ -62,6 +94,7 @@ void gui::GUI::Element::updateChildSize() {
 		}
 	}
 }
-void gui::GUI::Element::addChild(Element* ptr_element) {
+gui::GUI::Element* gui::GUI::Element::addChild(Element* ptr_element) {
 	childs.push_back(ptr_element);
+	return ptr_element;
 }

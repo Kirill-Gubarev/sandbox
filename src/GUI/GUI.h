@@ -4,6 +4,7 @@
 #include "common.h"
 
 namespace gui {
+	typedef uts::Vec2<float> Point2D;
 	//graphical user interface
 	class GUI {
 	public:
@@ -24,6 +25,7 @@ namespace gui {
 		class Element;
 		class List;
 		class Button;
+
 		static Element* ptr_element;
 
 		//an object of this class cannot be created

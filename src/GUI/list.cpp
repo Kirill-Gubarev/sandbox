@@ -4,35 +4,31 @@ gui::GUI::List::List()
 	:Element(), orientation(Mode::vertical) {
 
 }
-gui::GUI::List::List(float width, float height, uts::RGB color, Mode mode, Mode orientation)
-	:Element(width, height, color, mode), orientation(orientation) {
+gui::GUI::List::List(Point2D size, uts::RGB color, Mode mode, Mode orientation)
+	:Element(size, color, mode), orientation(orientation) {
 
 }
 
-void gui::GUI::List::updateChildSize() {
+void gui::GUI::List::updateChildLocation() {
 	int numberElements = childs.size();
-	float elementsWidth;
-	float elementsHeight;
-	float offsetX;
-	float offsetY;
+
+	Point2D elSize;
+	Point2D offset;
+
 	if (orientation == Mode::vertical) {
-		offsetX = 0;
-		offsetY = height / numberElements;
-		elementsWidth = width;
-		elementsHeight = height / numberElements;
+		offset.X = 0;
+		offset.Y = size.height / static_cast<float>(numberElements);
+		elSize.width = size.width;
+		elSize.height = size.height / static_cast<float>(numberElements);
 	}
 	else {
-		offsetX = width / numberElements;
-		offsetY = 0;
-		elementsWidth = width / numberElements;
-		elementsHeight = height;
+		offset.X = size.width / static_cast<float>(numberElements);
+		offset.Y = 0;
+		elSize.width = size.width / static_cast<float>(numberElements);
+		elSize.height = size.height;
 	}
 	for (size_t i = 0; i < numberElements; i++) {
-		childs[i]->setLocation(
-			static_cast<float>(i) * offsetX + X,
-			static_cast<float>(i) * offsetY + Y,
-			elementsWidth, elementsHeight
-		);
-		childs[i]->updateChildSize();
+		childs[i]->setLocation(offset * static_cast<float>(i) + pos, elSize);
+		childs[i]->updateChildLocation();
 	}
 }

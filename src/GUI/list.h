@@ -13,9 +13,9 @@ namespace gui {
 	public:
 		//constructors
 		List();
-		List(float width, float height, uts::RGB color, Mode mode, Mode orientation);
+		List(Point2D size, uts::RGB color, Mode mode, Mode orientation);
 
-		void updateChildSize() override;
+		void updateChildLocation() override;
 	};
 }
 

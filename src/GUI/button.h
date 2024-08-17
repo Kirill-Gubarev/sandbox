@@ -17,11 +17,11 @@ namespace gui {
 	public:
 		//constructors
 		Button();
-		Button(float width, float height, uts::RGB color, Mode mode);
+		Button(Point2D size, uts::RGB color, Mode mode);
 
 		void clearFunctions();
 
-		void mouseAction(float x, float y, MouseButton button, MouseAction action) const override;
+		void mouseAction(Point2D pos, MouseButton button, MouseAction action) const override;
 
 		//setters
 		void setLPress(void(*func)());

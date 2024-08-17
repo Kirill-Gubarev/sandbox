@@ -4,8 +4,8 @@ gui::GUI::Button::Button()
 	:Element() {
 	clearFunctions();
 }
-gui::GUI::Button::Button(float width, float height, uts::RGB color, Mode mode)
-	:Element(width, height, color, mode) {
+gui::GUI::Button::Button(Point2D size, uts::RGB color, Mode mode)
+	:Element(size, color, mode) {
 	clearFunctions();
 }
 
@@ -16,8 +16,8 @@ void gui::GUI::Button::clearFunctions() {
 	RRelease = nullptr;
 }
 
-void gui::GUI::Button::mouseAction(float x, float y, MouseButton button, MouseAction action) const {
-	Element::mouseAction(x, y, button, action);
+void gui::GUI::Button::mouseAction(Point2D pos, MouseButton button, MouseAction action) const {
+	Element::mouseAction(pos, button, action);
 	if (action == MouseAction::press)
 		switch (button) {
 		case MouseButton::left:

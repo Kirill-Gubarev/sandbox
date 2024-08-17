@@ -37,7 +37,7 @@ void sb::Input::mouseButtonCallback(GLFWwindow* window, int button, int action, 
 	double x, y;
 	glfwGetCursorPos(sb::SBWindow::getGLFWwindow(), &x, &y);
 	gui::GUI::ptr_element->mouseAction(
-		x, y,
+		gui::Point2D(x, sb::SBWindow::getHeight() - y),
 		static_cast<gui::GUI::MouseButton>(button),
 		static_cast<gui::GUI::MouseAction>(action)
 	);

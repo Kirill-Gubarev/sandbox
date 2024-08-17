@@ -4,6 +4,7 @@
 #pragma comment (lib, "opengl32.lib")
 #include <GLFW/glfw3.h>
 
+#include <algorithm>
 #include <iostream>
 #include <memory>
 #include <exception>
@@ -13,6 +14,7 @@
 #include <random>
 #include <string>
 #include <vector>
+#include <limits>
 
 #include "utilities/rgb.h"
 #include "utilities/vec2.hpp"
