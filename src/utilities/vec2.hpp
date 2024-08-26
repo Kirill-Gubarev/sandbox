@@ -1,5 +1,5 @@
-#ifndef VEC2D_HPP
-#define VEC2D_HPP
+#ifndef VEC2_HPP
+#define VEC2_HPP
 
 namespace uts {
 	/// this struct stores coordinates
@@ -25,37 +25,50 @@ namespace uts {
 		}
 
 		//operators
-		Vec2 operator+(const Vec2 other) const { return Vec2(X + other.X, Y + other.Y); }
-		Vec2 operator-(const Vec2 other) const { return Vec2(X - other.X, Y - other.Y); }
-		Vec2 operator*(const Vec2 other) const { return Vec2(X * other.X, Y * other.Y); }
-		Vec2 operator/(const Vec2 other) const { return Vec2(X / other.X, Y / other.Y); }
+		Vec2 operator+(const Vec2& other) const { return Vec2(X + other.X, Y + other.Y); }
+		Vec2 operator-(const Vec2& other) const { return Vec2(X - other.X, Y - other.Y); }
+		Vec2 operator*(const Vec2& other) const { return Vec2(X * other.X, Y * other.Y); }
+		Vec2 operator/(const Vec2& other) const { return Vec2(X / other.X, Y / other.Y); }
 
-		Vec2 operator+(const T value) const { return Vec2(X + value, Y + value); }
-		Vec2 operator-(const T value) const { return Vec2(X - value, Y - value); }
-		Vec2 operator*(const T value) const { return Vec2(X * value, Y * value); }
-		Vec2 operator/(const T value) const { return Vec2(X / value, Y / value); }
+		Vec2 operator+(const T& value) const { return Vec2(X + value, Y + value); }
+		Vec2 operator-(const T& value) const { return Vec2(X - value, Y - value); }
+		Vec2 operator*(const T& value) const { return Vec2(X * value, Y * value); }
+		Vec2 operator/(const T& value) const { return Vec2(X / value, Y / value); }
 
-		Vec2& operator+=(const Vec2 other) {
+		Vec2& operator+=(const Vec2& other) {
 			X += other.X;
 			Y += other.Y;
 			return *this;
 		}
-		Vec2& operator-=(const Vec2 other) {
+		Vec2& operator-=(const Vec2& other) {
 			X -= other.X;
 			Y -= other.Y;
 			return *this;
 		}
-		Vec2& operator*=(const Vec2 other) {
+		Vec2& operator*=(const Vec2& other) {
 			X *= other.X;
 			Y *= other.Y;
 			return *this;
 		}
-		Vec2& operator/=(const Vec2 other) {
+		Vec2& operator/=(const Vec2& other) {
 			X /= other.X;
 			Y /= other.Y;
 			return *this;
 		}
+
+		bool operator ==(const Vec2& other) {
+			return X == other.X && Y == other.Y;
+		}
+		bool operator !=(const Vec2& other) {
+			return X != other.X || Y != other.Y;
+		}
+		bool operator ==(const T value) {
+			return X == value && Y == value;
+		}
+		bool operator !=(const T value) {
+			return X != value || Y != value;
+		}
 	};
 }
 
-#endif //VEC2D_HPP
+#endif //VEC2_HPP

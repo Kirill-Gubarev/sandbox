@@ -16,11 +16,6 @@ void gui::GUI::init() {
 		Mode::fill,
 		Mode::horizontal
 	);
-	ptr_element->addChild(new Element(
-		Point2D(50, 50),
-		uts::RGB(255, 0, 0),
-		Mode::fill
-	));
 	Button* button = new Button(
 		Point2D(40, 100),
 		uts::RGB(255, 0, 255),
@@ -30,13 +25,14 @@ void gui::GUI::init() {
 	button->setLRelease([]() {std::cout << "Left release" << std::endl; });
 	button->setRPress([]() {std::cout << "Right press" << std::endl; });
 	button->setRRelease([]() {std::cout << "Right release" << std::endl; });
-	ptr_element->addChild(button->setMin(300, 300)->setMax(300, 300));
-	ptr_element->addChild(
-		new Element(
-			Point2D(40, 100), 
-			uts::RGB(255, 255, 0), 
-			Mode::fill
-		));
+	ptr_element->addChild(button)
+		->setMin(70, 0)->setMax(100,100000);
+	ptr_element->addChild(new Element(Point2D(40, 100), uts::RGB::random(), Mode::fill))
+		->setMin(250, 0)->setMax(300, 100000);
+	ptr_element->addChild(new Element(Point2D(40, 100), uts::RGB::random(), Mode::fill))
+		->setMin(150, 0)->setMax(250, 100000);
+	ptr_element->addChild(new Element(Point2D(40, 100), uts::RGB::random(), Mode::fill))
+		->setMin(180, 0)->setMax(200, 100000);
 	updateElementsSize();
 }
 void gui::GUI::terminate() {

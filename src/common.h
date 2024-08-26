@@ -10,8 +10,8 @@
 #include <exception>
 #include <stdint.h>
 #include <thread>
+#include <cstdlib>
 #include <chrono>
-#include <random>
 #include <string>
 #include <vector>
 #include <limits>

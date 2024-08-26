@@ -9,6 +9,7 @@ namespace uts {
 		std::uint8_t R, G, B;
 		RGB();
 		RGB(std::uint8_t r, std::uint8_t g, std::uint8_t b);
+		static RGB random();
 	};
 }
 

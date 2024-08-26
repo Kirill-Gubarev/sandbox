@@ -16,6 +16,9 @@ namespace gui {
 		List(Point2D size, uts::RGB color, Mode mode, Mode orientation);
 
 		void updateChildLocation() override;
+	private:
+		void updateChildLocationVertical();
+		void updateChildLocationHorizontal();
 	};
 }
 

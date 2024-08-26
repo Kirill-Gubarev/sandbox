@@ -12,15 +12,14 @@
 
 void sb::init() {
 	try {
+		srand(time(nullptr));
+
 		sb::Area::init(200, 100);
 		sb::SBWindow::init(900, 500, "sandbox");
 		sb::Render::init();
 		sb::Input::init();
 		gui::GUI::init();
 		sb::Game::init();
-		
-		//random initialization
-		srand(time(nullptr));
 	}
 	catch (std::exception& ex) {
 		sb::exitProgram(ex);

@@ -3,7 +3,7 @@
 gui::GUI::Element::Element() :Element(Point2D(1, 1), uts::RGB(255, 255, 255), Mode::fill) {}
 gui::GUI::Element::Element(Point2D size, uts::RGB color, Mode mode)
 	: color(color), mode(mode) {
-	setMin(0, 0);
+	setMin(0,0);
 	setMax(
 		std::numeric_limits<float>::infinity(), 
 		std::numeric_limits<float>::infinity()
