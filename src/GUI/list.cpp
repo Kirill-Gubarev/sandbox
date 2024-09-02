@@ -10,87 +10,145 @@ gui::GUI::List::List(Point2D size, uts::RGB color, Mode mode, Mode orientation)
 }
 
 void gui::GUI::List::updateChildLocation() {
-	if (orientation == Mode::vertical)
-		updateChildLocationVertical();
-	else
-		updateChildLocationHorizontal();
-}
-void gui::GUI::List::updateChildLocationVertical() {
-	
-}
-void gui::GUI::List::updateChildLocationHorizontal() {
 	const size_t numberElements = childs.size();
-	std::vector<float> newWidth(numberElements);
-	typedef std::pair<float*, Element*> newWidth_and_element;
-	std::vector<newWidth_and_element> sortedArr(numberElements);
-	float availableWidth = size.width;
+	
+	//declaring an array for new sizes
+	std::vector<float> arrNewSizes(numberElements);
+	//declaring an array to sort
+	std::vector<std::pair<float*, Element*>> sortedArr(numberElements);
+
+	//the variable for distribution
+	float availableSize = 0;
+
+	//lambda functions
+	float (*lam_getMin)(const Element* const element);
+	float (*lam_getMax)(const Element* const element);
+
+	if (orientation == Mode::vertical) {
+		availableSize = size.height;
+		lam_getMin = [](const Element* const element)->float {return element->getMin().height; };
+		lam_getMax = [](const Element* const element)->float {return element->getMax().height; };
+	}
+	else {
+		availableSize = size.width;
+		lam_getMin = [](const Element* const element)->float {return element->getMin().width; };
+		lam_getMax = [](const Element* const element)->float {return element->getMax().width; };
+	}
 
 	for (size_t i = 0; i < numberElements; ++i) {
-		newWidth[i] = childs[i]->getMin().width;
-		availableWidth -= newWidth[i];
+		//the size cannot be less than the minimum value
+		arrNewSizes[i] = lam_getMin(childs[i]);
+		//reduce the available size
+		availableSize -= arrNewSizes[i];
 
-		sortedArr[i].first = &newWidth[i];
+		//first is a pointer to the size
+		sortedArr[i].first = &arrNewSizes[i];
+		//second is a pointer to the element
 		sortedArr[i].second = childs[i];
 	}
-	std::sort(
-		begin(sortedArr),
-		end(sortedArr),
-		[](newWidth_and_element a, newWidth_and_element b) {
-			return a.second->getMax().width < b.second->getMax().width;
+	//sorting by a maximum values
+	std::sort(begin(sortedArr), end(sortedArr),
+		[&lam_getMax](std::pair<float*, Element*> a, std::pair<float*, Element*> b) {
+			return lam_getMax(a.second) < lam_getMax(b.second);
 		});
-	bool isMax = true;
+
+	//are there any elements that are not filled to the maximum
+	bool filledMax = false;
+	//the starting value of the cycles
 	size_t start = 0;
-	float countEl = 1;
-	float minEl = std::numeric_limits<float>::infinity();
-	float goal = std::numeric_limits<float>::infinity();
-	std::cout << "available: " << availableWidth << std::endl;
-	while (availableWidth > 0 && isMax) {
-		isMax = false;
-		minEl = std::numeric_limits<float>::infinity();
-		goal = std::numeric_limits<float>::infinity();
+	//the elements counter for distribution
+	uint32_t countEl = 1;
+	//the minimum value of an element in the array
+	float minSize = std::numeric_limits<float>::infinity();
+	//target value to fill in
+	float targetSize = std::numeric_limits<float>::infinity();
+
+	//===OUTPUT===
+	std::cout << "available: " << availableSize << std::endl;
+
+	while (availableSize > 0 && !filledMax) {
+		//update variables
+		filledMax = true;
+		minSize = std::numeric_limits<float>::infinity();
+		targetSize = std::numeric_limits<float>::infinity();
+
+		//finding the minimum size and target
 		for (size_t i = start; i < numberElements; ++i) {
-			if (minEl == sortedArr[i].first[NULL]) {
-				countEl++;
-			}
-			else if (minEl > sortedArr[i].first[NULL]) {
-				goal = minEl;
-				minEl = sortedArr[i].first[NULL];
+			const float newSize = sortedArr[i].first[NULL];
+			if (newSize < minSize) {
+				//the minimum value is always assigned in target
+				targetSize = minSize;
+				minSize = newSize;
+				//update the element counter, it cannot be less than 1
 				countEl = 1;
 			}
-			else if (goal > sortedArr[i].first[NULL]) {
-				goal = sortedArr[i].first[NULL];
-			}
+			else if (newSize == minSize)
+				countEl++;
+			else if (newSize < targetSize)
+				targetSize = newSize;
 		}
-		float distribution = availableWidth / countEl;
-		float dif = 0;
+
+		//distribution 
+		float portion = availableSize / countEl;
+
 		for (size_t i = start; i < numberElements; ++i) {
-			if (minEl >= sortedArr[i].first[NULL]) { 
-				isMax = true;
-				if (goal < sortedArr[i].second->getMax().width) {
-					dif = goal - sortedArr[i].first[NULL];
-					if (dif > distribution)
-						dif = distribution;
+			float newSize = sortedArr[i].first[NULL];
+			if (minSize >= newSize) {
+				//update "filledMax"
+				filledMax = false;
+				float maxSize = lam_getMax(sortedArr[i].second);
+				float dif = 0;
+
+				//calculating the difference
+				if (targetSize < maxSize) {
+					dif = targetSize - newSize;
+					if (dif > portion)
+						dif = portion;
 				}
 				else {
-					dif = sortedArr[i].second->getMax().width - sortedArr[i].first[NULL];
-					if (dif > distribution)
-						dif = distribution;
+					dif = maxSize - newSize;
+					if (dif > portion)
+						dif = portion;
 					else
 						start++;
 				}
-				availableWidth -= dif;
+
+				availableSize -= dif;
 				sortedArr[i].first[NULL] += dif;
 			}
 		}
 	}
-	float offset = pos.X;
+
+	//===OUTPUT===
 	std::cout << "min\tsize\tmax" << std::endl;
-	for (size_t i = 0; i < numberElements; ++i) {
-		std::cout << childs[i]->getMin().width << '\t' << newWidth[i] << '\t'<<  childs[i]->getMax().width<<'\n';
-		childs[i]->setLocation(Point2D(offset, pos.Y), Point2D(newWidth[i], size.height));
-		childs[i]->updateChildLocation();
-		offset += newWidth[i];
-	}
-	std::cout << "available: " << availableWidth << std::endl;
+
+	float offset = pos.X;
+	if(orientation == Mode::vertical)
+		for (size_t i = 0; i < numberElements; ++i) {
+
+			//===OUTPUT===
+			std::cout << lam_getMin(childs[i]) << '\t' << arrNewSizes[i] << '\t' << lam_getMax(childs[i]) << '\n';
+
+			childs[i]->setLocation(Point2D(pos.X, offset), Point2D(size.width, arrNewSizes[i]));
+			childs[i]->updateChildLocation();
+			offset += arrNewSizes[i];
+		}
+	else
+		for (size_t i = 0; i < numberElements; ++i) {
+
+			//===OUTPUT===
+			std::cout << lam_getMin(childs[i]) << '\t' << arrNewSizes[i] << '\t' << lam_getMax(childs[i]) << '\n';
+
+			childs[i]->setLocation(Point2D(offset, pos.Y), Point2D(arrNewSizes[i], size.height));
+			childs[i]->updateChildLocation();
+			offset += arrNewSizes[i];
+		}
+		
+
+	//===OUTPUT===
+	std::cout << "available: " << availableSize << std::endl;
+
+	//===OUTPUT===
 	std::cout << "===============" << std::endl;
+
 }

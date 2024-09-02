@@ -17,8 +17,6 @@ namespace gui {
 
 		void updateChildLocation() override;
 	private:
-		void updateChildLocationVertical();
-		void updateChildLocationHorizontal();
 	};
 }
 

@@ -25,14 +25,13 @@ void gui::GUI::init() {
 	button->setLRelease([]() {std::cout << "Left release" << std::endl; });
 	button->setRPress([]() {std::cout << "Right press" << std::endl; });
 	button->setRRelease([]() {std::cout << "Right release" << std::endl; });
-	ptr_element->addChild(button)
-		->setMin(70, 0)->setMax(100,100000);
+	ptr_element->addChild(button);
 	ptr_element->addChild(new Element(Point2D(40, 100), uts::RGB::random(), Mode::fill))
-		->setMin(250, 0)->setMax(300, 100000);
+		->setMinMax(50, 200, -1, -1);
 	ptr_element->addChild(new Element(Point2D(40, 100), uts::RGB::random(), Mode::fill))
-		->setMin(150, 0)->setMax(250, 100000);
+		->setMinMax(60, 220, -1, -1);
 	ptr_element->addChild(new Element(Point2D(40, 100), uts::RGB::random(), Mode::fill))
-		->setMin(180, 0)->setMax(200, 100000);
+		->setMinMax(100, 300, -1, -1);
 	updateElementsSize();
 }
 void gui::GUI::terminate() {

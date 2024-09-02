@@ -31,9 +31,16 @@ namespace gui {
 
 		//setters
 		Element* setLocation(Point2D newPos, Point2D newSize);
-		Element* setMin(float width, float height);
-		Element* setMax(float width, float height);
 		Element* setSize(float width, float height);
+
+		//sets the minimum and maximum values
+		//enter a value less than 0 to save the current value.
+		Element* setMinMax(float minWidth, float maxWidth, float minHeight, float maxHeight);
+		Element* setMinWidth(float width);
+		Element* setMaxWidth(float width);
+		Element* setMinHeight(float height);
+		Element* setMaxHeight(float height);
+		Element* clearMinMax();
 
 		virtual void mouseAction(Point2D pos, MouseButton button, MouseAction action) const;
 		const bool isInside(float x, float y) const;

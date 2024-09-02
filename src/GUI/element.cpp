@@ -3,11 +3,7 @@
 gui::GUI::Element::Element() :Element(Point2D(1, 1), uts::RGB(255, 255, 255), Mode::fill) {}
 gui::GUI::Element::Element(Point2D size, uts::RGB color, Mode mode)
 	: color(color), mode(mode) {
-	setMin(0,0);
-	setMax(
-		std::numeric_limits<float>::infinity(), 
-		std::numeric_limits<float>::infinity()
-	);
+	clearMinMax();
 	setLocation(Point2D(0, 0), size);
 }
 gui::GUI::Element::~Element() {
@@ -16,6 +12,7 @@ gui::GUI::Element::~Element() {
 		delete childs[i];
 	childs.clear();
 }
+
 gui::GUI::Element* gui::GUI::Element::setLocation(Point2D newPos, Point2D newSize) {
 	pos.X = newPos.X;
 	pos.Y = newPos.Y;
@@ -28,20 +25,46 @@ gui::GUI::Element* gui::GUI::Element::setLocation(Point2D newPos, Point2D newSiz
 	vertices[10] = pos.X + size.width;	vertices[11] = pos.Y + size.height;
 	return this;
 }
-gui::GUI::Element* gui::GUI::Element::setMin(float width, float height) {
-	if (width >= 0) min.width = std::min(width, max.width);
-	if (height >= 0) min.height = std::min(height, max.height);
-	return this;
-}
-gui::GUI::Element* gui::GUI::Element::setMax(float width, float height) {
-	max.width = std::max(width, min.width);
-	max.height = std::max(height, min.height);
-	return this;
-}
+
 gui::GUI::Element* gui::GUI::Element::setSize(float width, float height) {
 	//the values should not exceed the limits of min max
 	size.width = std::clamp(width, min.width, max.width);
 	size.height = std::clamp(height, min.height, max.height);
+	return this;
+}
+
+gui::GUI::Element* gui::GUI::Element::setMinMax(float minWidth, float maxWidth, float minHeight, float maxHeight) {
+	setMinWidth(minWidth);
+	setMaxWidth(maxWidth);
+	setMinHeight(minHeight);
+	setMaxHeight(maxHeight);
+	return this;
+}
+gui::GUI::Element* gui::GUI::Element::setMinWidth(float width) {
+	if (width >= 0)
+		min.width = std::min(width, max.width);
+	return this;
+}
+gui::GUI::Element* gui::GUI::Element::setMaxWidth(float width) {
+	if (width >= 0)
+		max.width = std::max(width, min.width);
+	return this;
+}
+gui::GUI::Element* gui::GUI::Element::setMinHeight(float height) {
+	if (height >= 0)
+		min.height = std::min(height, max.height);
+	return this;
+}
+gui::GUI::Element* gui::GUI::Element::setMaxHeight(float height) {
+	if (height >= 0)
+		max.height = std::max(height, min.height);
+	return this;
+}
+gui::GUI::Element* gui::GUI::Element::clearMinMax() {
+	min.width = 0;
+	max.width = std::numeric_limits<float>::infinity();
+	min.height = 0;
+	max.height = std::numeric_limits<float>::infinity();
 	return this;
 }
 
